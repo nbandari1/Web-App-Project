@@ -83,5 +83,3 @@ TBD
 Setup and installation steps will be added as development progresses.
 
 ---
-
-Would you like me to make it slightly more **academic** (for a course repo) or keep it **developer-focused** (for public GitHub)?
