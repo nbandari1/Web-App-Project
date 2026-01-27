@@ -55,10 +55,10 @@ The goal of this project is to combine entertainment tracking and personal produ
 
 ## Team Roles
 
-Nishnath Bandari : Team Lead, Backend Dev
-Nisarg Jaswal    : Frontend Dev, UI Designer
-Ryan Tersigni    : Backend Dev
-Mattrey Kumar    : Frontend Dev
+- Nishnath Bandari : Team Lead, Backend Dev
+- Nisarg Jaswal    : Frontend Dev, UI Designer
+- Ryan Tersigni    : Backend Dev
+- Mattrey Kumar    : Frontend Dev
 
 ---
 
