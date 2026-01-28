@@ -12,10 +12,10 @@
 People use multiple platforms daily (Steam, MyAnimeList, Spotify, etc.), but there’s no unified place to view their activity, track progress, or manage personal tasks. Our project proposes a web application that integrates these services into one centralized dashboard. Users can track their gaming hours, anime progress, music listening habits, personal tasks, sticky notes, and timers — all in one place. The goal is to reduce digital clutter and help users stay organized without switching between apps.
 
 **Team Members & Roles:**  
-- Nishnath Bandari –  TBD 
-- Mattrey Kumar Rana –  TBD 
-- Ryan Tersigni –  TBD
-- Nisarg Jaswal – TBD
+- Nishnath Bandari : Team Lead, Backend Dev
+- Nisarg Jaswal : Frontend Dev, UI Designer
+- Ryan Tersigni : Backend Dev
+- Mattrey Kumar : Frontend Dev
 
 ---
 
