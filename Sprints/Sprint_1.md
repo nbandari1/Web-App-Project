@@ -6,7 +6,7 @@
 
 ---
 
-## 🧑‍🤝‍🧑 Team Members
+## Team Members
 | Student Name | Student ID |
 |---------------|-------------|
 | Nishnath Bandari | 105202220 |
