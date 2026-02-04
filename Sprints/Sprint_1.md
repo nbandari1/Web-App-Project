@@ -61,60 +61,63 @@ Our solution is a **unified web dashboard** that aggregates data from external A
 
 ---
 
-## 4. Non-Functional Requirements
-Usability
-U1: Add/Edit/Delete task/activity in ≤ 3 actions each.
-U2: New user creates first task/activity in ≤ 60s from dashboard.
-U3: Each primary page shows title + primary action within 1 desktop screen (no scroll at 1366×768).
+## 4. Non-Functional Requirements (NFRs)
 
-Accessibility
-A1: Full keyboard support for core flows (Tab/Shift+Tab/Enter/Esc) + visible focus.
-A2: All inputs have labels/aria-label; errors announced/readable (e.g., aria-live).
-A3: Meaningful icons/images have alt/aria-label; decorative icons aria-hidden.
+### Usability
+- **U1:** Add/Edit/Delete task/activity in **≤ 3 actions** each.
+- **U2:** New user creates their first task/activity in **≤ 60s** from the dashboard.
+- **U3:** Each primary page shows **page title + primary action** within **1 desktop screen**
+  (no scroll at **1366×768**).
 
-Performance
-P1: Dashboard loads in ≤ 3.0s with typical data.
-P2: Add/Edit/Delete shows feedback fast and completes in ≤ 1.0s.
-P3: No noticeable UI freeze > 200ms during common actions.
+### Accessibility
+- **A1:** Full keyboard support for core flows (**Tab / Shift+Tab / Enter / Esc**) + visible focus.
+- **A2:** All inputs have **labels/aria-label**; errors are announced/readable (e.g., `aria-live`).
+- **A3:** Meaningful icons/images have **alt/aria-label**; decorative icons use `aria-hidden`.
 
-Reliability
-R1: API failures show clear error + retry; app doesn’t crash.
-R2: Failed save does not erase form input.
-R3: Fallback UI exists for client errors (Reload/Return Home).
+### Performance
+- **P1:** Dashboard loads in **≤ 3.0s** with typical data.
+- **P2:** Add/Edit/Delete provides fast feedback and completes in **≤ 1.0s**.
+- **P3:** No noticeable UI freeze **> 200ms** during common actions.
 
-Availability
-AV1: Target ≥ 99% uptime during demo/testing windows (excluding maintenance).
-AV2: Offline/disconnect shows status message within ≤ 5s.
+### Reliability
+- **R1:** API failures show a clear error + retry; app doesn’t crash.
+- **R2:** Failed save does **not** erase form input.
+- **R3:** Fallback UI exists for client errors (**Reload / Return Home**).
 
-Security
-S1: HTTPS only, no mixed content.
-S2: Tokens/credentials not logged in production; avoid insecure plain-text storage.
-S3: Protected routes redirect on expired/invalid auth within ≤ 2s.
+### Availability
+- **AV1:** Target **≥ 99% uptime** during demo/testing windows (excluding maintenance).
+- **AV2:** Offline/disconnect shows a status message within **≤ 5s**.
 
-Privacy
-PR1: Data-use notice clearly states what third-party data is used and why.
-PR2: User can unlink/delete stored data and UI reflects it within ≤ 10s.
+### Security
+- **S1:** **HTTPS only**, no mixed content.
+- **S2:** Tokens/credentials are **not logged** in production; avoid insecure plain-text storage.
+- **S3:** Protected routes redirect on expired/invalid auth within **≤ 2s**.
 
-Data Integrity
-DI1: Sync never overwrites user notes/preferences without confirmation.
-DI2: No duplicates after sync; conflicts follow a documented rule.
+### Privacy
+- **PR1:** Data-use notice clearly states what third-party data is used and why.
+- **PR2:** User can unlink/delete stored data and UI reflects it within **≤ 10s**.
 
-Maintainability
-M1: Code split into UI / services (API) / business logic modules.
-M2: Lint passes; shared components reused.
+### Data Integrity
+- **DI1:** Sync never overwrites user notes/preferences without confirmation.
+- **DI2:** No duplicates after sync; conflicts follow a documented rule.
 
-Compatibility
-C1: Core flows work on latest Chrome/Edge/Firefox.
-C2: Mobile 375–414px works with no horizontal scroll.
-C3: Works at 200% zoom with no overlapping critical controls.
+### Maintainability
+- **M1:** Code split into **UI / services (API) / business logic** modules.
+- **M2:** Lint passes; shared components reused.
 
-Scalability
-SC1: Cache common API responses; use safe sync (debounce/throttle) to avoid rate limits.
-SC2: Long lists use pagination/incremental loading to stay responsive.
+### Compatibility
+- **C1:** Core flows work on latest **Chrome / Edge / Firefox**.
+- **C2:** Mobile **375–414px** works with no horizontal scroll.
+- **C3:** Works at **200% zoom** with no overlapping critical controls.
 
-Compliance
-CO1: Document third-party services (name + purpose) + required attribution.
-CO2: Data deletion capability exists and confirms completion.
+### Scalability
+- **SC1:** Cache common API responses; safe sync (debounce/throttle) to avoid rate limits.
+- **SC2:** Long lists use pagination/incremental loading to stay responsive.
+
+### Compliance
+- **CO1:** Document third-party services (name + purpose) + required attribution.
+- **CO2:** Data deletion capability exists and confirms completion.
+
 
 ---
 
