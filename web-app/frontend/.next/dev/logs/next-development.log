@@ -1,0 +1,6 @@
+[00:00:03.392] Server  LOG     ✓ Ready in 2.5s
+[00:02:38.962] Server  LOG     ✓ Compiled in 113ms
+[00:05:12.748] Server  LOG     ✓ Compiled in 285ms
+[00:08:04.735] Server  LOG     ✓ Compiled in 1357ms
+[00:08:19.204] Server  LOG     ✓ Compiled in 61ms
+[00:08:31.892] Browser LOG     Response: {"email":"jkcq@wdb.cco","id":101,"password":"qwcvqwcvqcb5645646"}
