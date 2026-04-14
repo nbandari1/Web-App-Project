@@ -2,7 +2,7 @@
 
 import { useState, ChangeEvent, FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import { createUser } from "@/lib/api";
+import { createUser, setCurrentUserEmail } from "@/lib/api";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -40,6 +40,9 @@ export default function LoginForm() {
         email: formData.email,
         password: formData.password,
       });
+
+      // Persist the active user for the dashboard.
+      setCurrentUserEmail(formData.email);
 
       setMessage(data.message);
 
