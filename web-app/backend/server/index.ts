@@ -19,7 +19,15 @@ app.use(
         callback(null, true);
         return;
       }
-      callback(new Error("Not allowed by CORS"));
+
+      console.warn(`Blocked CORS request from origin: ${origin}`);
+      const corsError = new Error("CORS origin denied") as Error & {
+        status?: number;
+        statusCode?: number;
+      };
+      corsError.status = 403;
+      corsError.statusCode = 403;
+      callback(corsError);
     },
     credentials: true,
   }),
