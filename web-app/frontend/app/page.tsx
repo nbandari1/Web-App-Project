@@ -62,10 +62,10 @@ export default function Home() {
                 Welcome
               </p>
               <h2 className="mt-3 text-3xl font-bold tracking-tight">
-                Create your account
+                Access your workspace
               </h2>
               <p className="mt-3 text-sm leading-6 text-slate-400">
-                Get started with your personalized activity dashboard.
+                Sign in to continue or create a new account to get started.
               </p>
             </div>
 
