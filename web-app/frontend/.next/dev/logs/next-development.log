@@ -1,0 +1,673 @@
+[00:00:01.730] Server  LOG     ✓ Ready in 1176ms
+[00:00:10.137] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:01:52.991] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:01:56.182] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:02:20.698] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:02:24.577] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:12:35.319] Server  LOG     ✓ Compiled in 245ms
+[00:16:08.835] Server  LOG     ✓ Compiled in 612ms
+[00:22:01.131] Server  LOG     ✓ Compiled in 146ms
+[00:24:26.481] Server  LOG     ✓ Compiled in 126ms
+[00:25:36.238] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:29:06.120] Server  LOG     ✓ Compiled in 65ms
+[00:29:17.664] Server  LOG     ✓ Compiled in 230ms
+[00:30:43.335] Server  LOG     ✓ Compiled in 45ms
+[00:30:55.899] Server  LOG     ✓ Compiled in 71ms
+[00:32:39.299] Server  LOG     ✓ Compiled in 162ms
+[00:32:44.411] Server  LOG     ✓ Compiled in 43ms
+[00:32:50.166] Server  LOG     ✓ Compiled in 31ms
+[00:32:54.761] Server  LOG     ✓ Compiled in 30ms
+[00:34:15.614] Server  LOG     ✓ Compiled in 57ms
+[00:34:20.973] Server  LOG     ✓ Compiled in 325ms
+[00:34:44.507] Server  LOG     ✓ Compiled in 27ms
+[00:38:17.547] Server  LOG     ✓ Compiled in 69ms
+[00:40:20.685] Server  LOG     ✓ Compiled in 60ms
+[00:43:28.030] Server  LOG     ✓ Compiled in 33ms
+[00:43:30.244] Server  LOG     ✓ Compiled in 29ms
+[00:43:31.930] Server  LOG     ✓ Compiled in 24ms
+[00:43:35.530] Server  LOG     ✓ Compiled in 72ms
+[00:43:37.801] Server  LOG     ✓ Compiled in 34ms
+[00:46:02.109] Server  LOG     ✓ Compiled in 57ms
+[00:46:03.922] Server  LOG     ✓ Compiled in 32ms
+[00:46:04.924] Browser ERROR   uncaughtError: ReferenceError: currentSession is not defined
+[00:46:05.464] Server  WARN    ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:46:05.472] Server  LOG     ✓ Compiled in 29ms
+[00:46:06.078] Server  ERROR   ⨯ ReferenceError: currentSession is not defined
+[00:46:06.326] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:46:06.498] Server  WARN    ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:46:06.498] Browser ERROR   uncaughtError: ReferenceError: currentSession is not defined
+[00:46:06.739] Server  LOG     ✓ Compiled in 27ms
+[00:46:06.969] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:46:11.169] Server  ERROR   ⨯ ./frontend/components/dashboard/FocusTimer.tsx:4:1
+Module not found: Can't resolve '@heroicons/react/24/solid'
+  2 |
+  3 | import { useEffect, useState } from "react";
+> 4 | import { ArrowPathIcon, PlayIcon, PauseIcon, BackwardIcon } from "@heroicons/react/24/solid";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | function formatTime(totalSeconds: number) {
+  7 |   const minutes = Math.floor(totalSeconds / 60);
+
+
+
+Import trace:
+  Server Component:
+    ./frontend/components/dashboard/FocusTimer.tsx
+    ./frontend/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:46:11.172] Server  ERROR   ⨯ ./frontend/components/dashboard/FocusTimer.tsx:4:1
+Module not found: Can't resolve '@heroicons/react/24/solid'
+  2 |
+  3 | import { useEffect, useState } from "react";
+> 4 | import { ArrowPathIcon, PlayIcon, PauseIcon, BackwardIcon } from "@heroicons/react/24/solid";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | function formatTime(totalSeconds: number) {
+  7 |   const minutes = Math.floor(totalSeconds / 60);
+
+
+
+Import trace:
+  Server Component:
+    ./frontend/components/dashboard/FocusTimer.tsx
+    ./frontend/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:46:11.173] Server  ERROR   ⨯ ./frontend/components/dashboard/FocusTimer.tsx:4:1
+Module not found: Can't resolve '@heroicons/react/24/solid'
+  2 |
+  3 | import { useEffect, useState } from "react";
+> 4 | import { ArrowPathIcon, PlayIcon, PauseIcon, BackwardIcon } from "@heroicons/react/24/solid";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | function formatTime(totalSeconds: number) {
+  7 |   const minutes = Math.floor(totalSeconds / 60);
+
+
+
+Import trace:
+  Server Component:
+    ./frontend/components/dashboard/FocusTimer.tsx
+    ./frontend/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:46:11.174] Server  ERROR   ⨯ ./frontend/components/dashboard/FocusTimer.tsx:4:1
+Module not found: Can't resolve '@heroicons/react/24/solid'
+  2 |
+  3 | import { useEffect, useState } from "react";
+> 4 | import { ArrowPathIcon, PlayIcon, PauseIcon, BackwardIcon } from "@heroicons/react/24/solid";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | function formatTime(totalSeconds: number) {
+  7 |   const minutes = Math.floor(totalSeconds / 60);
+
+
+
+Import trace:
+  Server Component:
+    ./frontend/components/dashboard/FocusTimer.tsx
+    ./frontend/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:46:11.176] Server  ERROR   ⨯ ./frontend/components/dashboard/FocusTimer.tsx:4:1
+Module not found: Can't resolve '@heroicons/react/24/solid'
+  2 |
+  3 | import { useEffect, useState } from "react";
+> 4 | import { ArrowPathIcon, PlayIcon, PauseIcon, BackwardIcon } from "@heroicons/react/24/solid";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | function formatTime(totalSeconds: number) {
+  7 |   const minutes = Math.floor(totalSeconds / 60);
+
+
+
+Import trace:
+  Server Component:
+    ./frontend/components/dashboard/FocusTimer.tsx
+    ./frontend/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:46:11.177] Server  ERROR   ⨯ ./frontend/components/dashboard/FocusTimer.tsx:4:1
+Module not found: Can't resolve '@heroicons/react/24/solid'
+  2 |
+  3 | import { useEffect, useState } from "react";
+> 4 | import { ArrowPathIcon, PlayIcon, PauseIcon, BackwardIcon } from "@heroicons/react/24/solid";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | function formatTime(totalSeconds: number) {
+  7 |   const minutes = Math.floor(totalSeconds / 60);
+
+
+
+Import trace:
+  Server Component:
+    ./frontend/components/dashboard/FocusTimer.tsx
+    ./frontend/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:46:11.178] Server  ERROR   ⨯ ./frontend/components/dashboard/FocusTimer.tsx:4:1
+Module not found: Can't resolve '@heroicons/react/24/solid'
+  2 |
+  3 | import { useEffect, useState } from "react";
+> 4 | import { ArrowPathIcon, PlayIcon, PauseIcon, BackwardIcon } from "@heroicons/react/24/solid";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | function formatTime(totalSeconds: number) {
+  7 |   const minutes = Math.floor(totalSeconds / 60);
+
+
+
+Import trace:
+  Server Component:
+    ./frontend/components/dashboard/FocusTimer.tsx
+    ./frontend/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:46:11.179] Server  ERROR   ⨯ ./frontend/components/dashboard/FocusTimer.tsx:4:1
+Module not found: Can't resolve '@heroicons/react/24/solid'
+  2 |
+  3 | import { useEffect, useState } from "react";
+> 4 | import { ArrowPathIcon, PlayIcon, PauseIcon, BackwardIcon } from "@heroicons/react/24/solid";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | function formatTime(totalSeconds: number) {
+  7 |   const minutes = Math.floor(totalSeconds / 60);
+
+
+
+Import trace:
+  Server Component:
+    ./frontend/components/dashboard/FocusTimer.tsx
+    ./frontend/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:46:11.180] Server  ERROR   ⨯ ./frontend/components/dashboard/FocusTimer.tsx:4:1
+Module not found: Can't resolve '@heroicons/react/24/solid'
+  2 |
+  3 | import { useEffect, useState } from "react";
+> 4 | import { ArrowPathIcon, PlayIcon, PauseIcon, BackwardIcon } from "@heroicons/react/24/solid";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | function formatTime(totalSeconds: number) {
+  7 |   const minutes = Math.floor(totalSeconds / 60);
+
+
+
+Import trace:
+  Server Component:
+    ./frontend/components/dashboard/FocusTimer.tsx
+    ./frontend/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:46:11.182] Server  ERROR   ⨯ ./frontend/components/dashboard/FocusTimer.tsx:4:1
+Module not found: Can't resolve '@heroicons/react/24/solid'
+  2 |
+  3 | import { useEffect, useState } from "react";
+> 4 | import { ArrowPathIcon, PlayIcon, PauseIcon, BackwardIcon } from "@heroicons/react/24/solid";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | function formatTime(totalSeconds: number) {
+  7 |   const minutes = Math.floor(totalSeconds / 60);
+
+
+
+Import trace:
+  Server Component:
+    ./frontend/components/dashboard/FocusTimer.tsx
+    ./frontend/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:46:11.190] Server  ERROR   ⨯ ./frontend/components/dashboard/FocusTimer.tsx:4:1
+Module not found: Can't resolve '@heroicons/react/24/solid'
+  2 |
+  3 | import { useEffect, useState } from "react";
+> 4 | import { ArrowPathIcon, PlayIcon, PauseIcon, BackwardIcon } from "@heroicons/react/24/solid";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | function formatTime(totalSeconds: number) {
+  7 |   const minutes = Math.floor(totalSeconds / 60);
+
+
+
+Import trace:
+  Server Component:
+    ./frontend/components/dashboard/FocusTimer.tsx
+    ./frontend/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:46:11.192] Server  ERROR   ⨯ ./frontend/components/dashboard/FocusTimer.tsx:4:1
+Module not found: Can't resolve '@heroicons/react/24/solid'
+  2 |
+  3 | import { useEffect, useState } from "react";
+> 4 | import { ArrowPathIcon, PlayIcon, PauseIcon, BackwardIcon } from "@heroicons/react/24/solid";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | function formatTime(totalSeconds: number) {
+  7 |   const minutes = Math.floor(totalSeconds / 60);
+
+
+
+Import trace:
+  Server Component:
+    ./frontend/components/dashboard/FocusTimer.tsx
+    ./frontend/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:46:11.193] Server  ERROR   ⨯ ./frontend/components/dashboard/FocusTimer.tsx:4:1
+Module not found: Can't resolve '@heroicons/react/24/solid'
+  2 |
+  3 | import { useEffect, useState } from "react";
+> 4 | import { ArrowPathIcon, PlayIcon, PauseIcon, BackwardIcon } from "@heroicons/react/24/solid";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | function formatTime(totalSeconds: number) {
+  7 |   const minutes = Math.floor(totalSeconds / 60);
+
+
+
+Import trace:
+  Server Component:
+    ./frontend/components/dashboard/FocusTimer.tsx
+    ./frontend/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:46:11.196] Server  ERROR   ⨯ ./frontend/components/dashboard/FocusTimer.tsx:4:1
+Module not found: Can't resolve '@heroicons/react/24/solid'
+  2 |
+  3 | import { useEffect, useState } from "react";
+> 4 | import { ArrowPathIcon, PlayIcon, PauseIcon, BackwardIcon } from "@heroicons/react/24/solid";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | function formatTime(totalSeconds: number) {
+  7 |   const minutes = Math.floor(totalSeconds / 60);
+
+
+
+Import trace:
+  Server Component:
+    ./frontend/components/dashboard/FocusTimer.tsx
+    ./frontend/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:46:11.197] Server  ERROR   ⨯ ./frontend/components/dashboard/FocusTimer.tsx:4:1
+Module not found: Can't resolve '@heroicons/react/24/solid'
+  2 |
+  3 | import { useEffect, useState } from "react";
+> 4 | import { ArrowPathIcon, PlayIcon, PauseIcon, BackwardIcon } from "@heroicons/react/24/solid";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | function formatTime(totalSeconds: number) {
+  7 |   const minutes = Math.floor(totalSeconds / 60);
+
+
+
+Import trace:
+  Server Component:
+    ./frontend/components/dashboard/FocusTimer.tsx
+    ./frontend/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:46:11.198] Server  ERROR   ⨯ ./frontend/components/dashboard/FocusTimer.tsx:4:1
+Module not found: Can't resolve '@heroicons/react/24/solid'
+  2 |
+  3 | import { useEffect, useState } from "react";
+> 4 | import { ArrowPathIcon, PlayIcon, PauseIcon, BackwardIcon } from "@heroicons/react/24/solid";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | function formatTime(totalSeconds: number) {
+  7 |   const minutes = Math.floor(totalSeconds / 60);
+
+
+
+Import trace:
+  Server Component:
+    ./frontend/components/dashboard/FocusTimer.tsx
+    ./frontend/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:46:11.199] Server  ERROR   ⨯ ./frontend/components/dashboard/FocusTimer.tsx:4:1
+Module not found: Can't resolve '@heroicons/react/24/solid'
+  2 |
+  3 | import { useEffect, useState } from "react";
+> 4 | import { ArrowPathIcon, PlayIcon, PauseIcon, BackwardIcon } from "@heroicons/react/24/solid";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | function formatTime(totalSeconds: number) {
+  7 |   const minutes = Math.floor(totalSeconds / 60);
+
+
+
+Import trace:
+  Server Component:
+    ./frontend/components/dashboard/FocusTimer.tsx
+    ./frontend/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:46:11.200] Server  ERROR   ⨯ ./frontend/components/dashboard/FocusTimer.tsx:4:1
+Module not found: Can't resolve '@heroicons/react/24/solid'
+  2 |
+  3 | import { useEffect, useState } from "react";
+> 4 | import { ArrowPathIcon, PlayIcon, PauseIcon, BackwardIcon } from "@heroicons/react/24/solid";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | function formatTime(totalSeconds: number) {
+  7 |   const minutes = Math.floor(totalSeconds / 60);
+
+
+
+Import trace:
+  Server Component:
+    ./frontend/components/dashboard/FocusTimer.tsx
+    ./frontend/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:46:11.203] Server  ERROR   ⨯ ./frontend/components/dashboard/FocusTimer.tsx:4:1
+Module not found: Can't resolve '@heroicons/react/24/solid'
+  2 |
+  3 | import { useEffect, useState } from "react";
+> 4 | import { ArrowPathIcon, PlayIcon, PauseIcon, BackwardIcon } from "@heroicons/react/24/solid";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | function formatTime(totalSeconds: number) {
+  7 |   const minutes = Math.floor(totalSeconds / 60);
+
+
+
+Import trace:
+  Server Component:
+    ./frontend/components/dashboard/FocusTimer.tsx
+    ./frontend/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:46:11.205] Server  ERROR   ⨯ ./frontend/components/dashboard/FocusTimer.tsx:4:1
+Module not found: Can't resolve '@heroicons/react/24/solid'
+  2 |
+  3 | import { useEffect, useState } from "react";
+> 4 | import { ArrowPathIcon, PlayIcon, PauseIcon, BackwardIcon } from "@heroicons/react/24/solid";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | function formatTime(totalSeconds: number) {
+  7 |   const minutes = Math.floor(totalSeconds / 60);
+
+
+
+Import trace:
+  Server Component:
+    ./frontend/components/dashboard/FocusTimer.tsx
+    ./frontend/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:46:11.207] Server  ERROR   ⨯ ./frontend/components/dashboard/FocusTimer.tsx:4:1
+Module not found: Can't resolve '@heroicons/react/24/solid'
+  2 |
+  3 | import { useEffect, useState } from "react";
+> 4 | import { ArrowPathIcon, PlayIcon, PauseIcon, BackwardIcon } from "@heroicons/react/24/solid";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | function formatTime(totalSeconds: number) {
+  7 |   const minutes = Math.floor(totalSeconds / 60);
+
+
+
+Import trace:
+  Server Component:
+    ./frontend/components/dashboard/FocusTimer.tsx
+    ./frontend/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:46:11.209] Server  ERROR   ⨯ ./frontend/components/dashboard/FocusTimer.tsx:4:1
+Module not found: Can't resolve '@heroicons/react/24/solid'
+  2 |
+  3 | import { useEffect, useState } from "react";
+> 4 | import { ArrowPathIcon, PlayIcon, PauseIcon, BackwardIcon } from "@heroicons/react/24/solid";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | function formatTime(totalSeconds: number) {
+  7 |   const minutes = Math.floor(totalSeconds / 60);
+
+
+
+Import trace:
+  Server Component:
+    ./frontend/components/dashboard/FocusTimer.tsx
+    ./frontend/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:46:11.211] Server  ERROR   ⨯ ./frontend/components/dashboard/FocusTimer.tsx:4:1
+Module not found: Can't resolve '@heroicons/react/24/solid'
+  2 |
+  3 | import { useEffect, useState } from "react";
+> 4 | import { ArrowPathIcon, PlayIcon, PauseIcon, BackwardIcon } from "@heroicons/react/24/solid";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | function formatTime(totalSeconds: number) {
+  7 |   const minutes = Math.floor(totalSeconds / 60);
+
+
+
+Import trace:
+  Server Component:
+    ./frontend/components/dashboard/FocusTimer.tsx
+    ./frontend/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:46:11.212] Server  ERROR   ⨯ ./frontend/components/dashboard/FocusTimer.tsx:4:1
+Module not found: Can't resolve '@heroicons/react/24/solid'
+  2 |
+  3 | import { useEffect, useState } from "react";
+> 4 | import { ArrowPathIcon, PlayIcon, PauseIcon, BackwardIcon } from "@heroicons/react/24/solid";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | function formatTime(totalSeconds: number) {
+  7 |   const minutes = Math.floor(totalSeconds / 60);
+
+
+
+Import trace:
+  Server Component:
+    ./frontend/components/dashboard/FocusTimer.tsx
+    ./frontend/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:46:11.214] Server  ERROR   ⨯ ./frontend/components/dashboard/FocusTimer.tsx:4:1
+Module not found: Can't resolve '@heroicons/react/24/solid'
+  2 |
+  3 | import { useEffect, useState } from "react";
+> 4 | import { ArrowPathIcon, PlayIcon, PauseIcon, BackwardIcon } from "@heroicons/react/24/solid";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | function formatTime(totalSeconds: number) {
+  7 |   const minutes = Math.floor(totalSeconds / 60);
+
+
+
+Import trace:
+  Server Component:
+    ./frontend/components/dashboard/FocusTimer.tsx
+    ./frontend/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:46:11.215] Server  ERROR   ⨯ ./frontend/components/dashboard/FocusTimer.tsx:4:1
+Module not found: Can't resolve '@heroicons/react/24/solid'
+  2 |
+  3 | import { useEffect, useState } from "react";
+> 4 | import { ArrowPathIcon, PlayIcon, PauseIcon, BackwardIcon } from "@heroicons/react/24/solid";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | function formatTime(totalSeconds: number) {
+  7 |   const minutes = Math.floor(totalSeconds / 60);
+
+
+
+Import trace:
+  Server Component:
+    ./frontend/components/dashboard/FocusTimer.tsx
+    ./frontend/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:46:11.216] Server  ERROR   ⨯ ./frontend/components/dashboard/FocusTimer.tsx:4:1
+Module not found: Can't resolve '@heroicons/react/24/solid'
+  2 |
+  3 | import { useEffect, useState } from "react";
+> 4 | import { ArrowPathIcon, PlayIcon, PauseIcon, BackwardIcon } from "@heroicons/react/24/solid";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | function formatTime(totalSeconds: number) {
+  7 |   const minutes = Math.floor(totalSeconds / 60);
+
+
+
+Import trace:
+  Server Component:
+    ./frontend/components/dashboard/FocusTimer.tsx
+    ./frontend/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:46:11.218] Server  ERROR   ⨯ ./frontend/components/dashboard/FocusTimer.tsx:4:1
+Module not found: Can't resolve '@heroicons/react/24/solid'
+  2 |
+  3 | import { useEffect, useState } from "react";
+> 4 | import { ArrowPathIcon, PlayIcon, PauseIcon, BackwardIcon } from "@heroicons/react/24/solid";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | function formatTime(totalSeconds: number) {
+  7 |   const minutes = Math.floor(totalSeconds / 60);
+
+
+
+Import trace:
+  Server Component:
+    ./frontend/components/dashboard/FocusTimer.tsx
+    ./frontend/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:46:11.219] Server  ERROR   ⨯ ./frontend/components/dashboard/FocusTimer.tsx:4:1
+Module not found: Can't resolve '@heroicons/react/24/solid'
+  2 |
+  3 | import { useEffect, useState } from "react";
+> 4 | import { ArrowPathIcon, PlayIcon, PauseIcon, BackwardIcon } from "@heroicons/react/24/solid";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | function formatTime(totalSeconds: number) {
+  7 |   const minutes = Math.floor(totalSeconds / 60);
+
+
+
+Import trace:
+  Server Component:
+    ./frontend/components/dashboard/FocusTimer.tsx
+    ./frontend/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:46:11.220] Server  ERROR   ⨯ ./frontend/components/dashboard/FocusTimer.tsx:4:1
+Module not found: Can't resolve '@heroicons/react/24/solid'
+  2 |
+  3 | import { useEffect, useState } from "react";
+> 4 | import { ArrowPathIcon, PlayIcon, PauseIcon, BackwardIcon } from "@heroicons/react/24/solid";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | function formatTime(totalSeconds: number) {
+  7 |   const minutes = Math.floor(totalSeconds / 60);
+
+
+
+Import trace:
+  Server Component:
+    ./frontend/components/dashboard/FocusTimer.tsx
+    ./frontend/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:46:11.222] Server  LOG     ✓ Compiled in 241ms
+[00:46:12.011] Browser ERROR   ./frontend/components/dashboard/FocusTimer.tsx:4:1
+Module not found: Can't resolve '@heroicons/react/24/solid'
+  2 |
+  3 | import { useEffect, useState } from "react";
+> 4 | import { ArrowPathIcon, PlayIcon, PauseIcon, BackwardIcon } from "@heroicons/react/24/solid";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | function formatTime(totalSeconds: number) {
+  7 |   const minutes = Math.floor(totalSeconds / 60);
+
+Import trace:
+  Server Component:
+    ./frontend/components/dashboard/FocusTimer.tsx
+    ./frontend/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+[00:46:14.343] Browser ERROR   uncaughtError: ReferenceError: ArrowPathIcon is not defined
+[00:46:20.389] Server  WARN    ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:46:20.415] Server  LOG     ✓ Compiled in 47ms
+[00:46:21.005] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:47:57.395] Server  LOG     ✓ Compiled in 36ms
+[00:48:04.177] Server  LOG     ✓ Compiled in 27ms
+[00:48:06.820] Server  LOG     ✓ Compiled in 41ms
+[00:48:08.386] Server  LOG     ✓ Compiled in 28ms
+[00:49:16.656] Server  LOG     ✓ Compiled in 32ms
+[00:49:18.450] Server  LOG     ✓ Compiled in 35ms
+[00:49:20.346] Server  LOG     ✓ Compiled in 42ms
+[00:49:22.052] Server  LOG     ✓ Compiled in 32ms
+[00:49:23.760] Server  LOG     ✓ Compiled in 96ms
+[00:50:52.069] Server  LOG     ✓ Compiled in 64ms
+[00:50:54.028] Server  LOG     ✓ Compiled in 37ms
+[00:51:32.844] Server  LOG     ✓ Compiled in 26ms
