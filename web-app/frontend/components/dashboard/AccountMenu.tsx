@@ -68,9 +68,9 @@ export default function AccountMenu() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [open, openSettings]);
 
-  // 🔥 SIGN OUT FUNCTION
+  //Sign out
   const handleSignOut = () => {
-    localStorage.removeItem("user"); // make sure this matches your storage key
+    localStorage.removeItem("user"); 
     setOpen(false);
     router.push("/");
   };
