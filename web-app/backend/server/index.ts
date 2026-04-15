@@ -13,7 +13,10 @@ const PORT = process.env.PORT || 5000;
 
 app.use(
   cors({
-    origin: /^http:\/\/localhost:300\d$/,
+    origin: [
+    "https://web-app-project-qly4.onrender.com/",
+    "http://localhost:3000"
+    ],
     credentials: true,
   }),
 );
