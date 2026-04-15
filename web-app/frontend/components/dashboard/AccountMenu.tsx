@@ -124,17 +124,15 @@ export default function AccountMenu() {
         </div>
       )}
 
-      {openSettings && portalContainerRef.current
-        ? createPortal(
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-sm">
-              <div ref={settingsRef} className="w-full max-w-lg rounded-3xl bg-slate-900 p-6">
-                <h2 className="text-xl text-white">Settings</h2>
-                <button onClick={() => setOpenSettings(false)}>Close</button>
-              </div>
-            </div>,
-            portalContainerRef.current
-          )
-        : null}
+     {/* SETTINGS MODAL */}
+      {portalRef.current &&
+        createPortal(
+          <SettingsModal
+            open={openSettings}
+            onClose={() => setOpenSettings(false)}
+          />,
+          portalRef.current
+        )}
     </div>
   );
 }
