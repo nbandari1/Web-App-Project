@@ -6,19 +6,19 @@ import AccountMenu from "@/components/dashboard/AccountMenu";
 export default function Dashboard() {
   return (
     <main className="min-h-screen bg-slate-950 text-white">
-      <section className="relative min-h-screen px-6 py-8">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.16),transparent_30%),radial-gradient(circle_at_bottom,rgba(14,165,233,0.12),transparent_35%)]" />
-        <div className="relative mx-auto flex w-full max-w-[1600px] flex-col gap-6">
-          <header className="relative z-50 overflow-visible rounded-[2rem] border border-slate-800 bg-slate-900/80 p-6 shadow-2xl shadow-black/30 backdrop-blur-xl sm:p-8">
+      <section className="relative min-h-screen px-4 py-4 sm:px-6 sm:py-8">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.16),transparent_30%),radial-gradient(circle_at_bottom,rgba(14,165,233,0.12),transparent_35%)]" />
+        <div className="relative mx-auto flex w-full max-w-[1600px] flex-col gap-4 sm:gap-6">
+          <header className="relative z-50 overflow-visible rounded-3xl border border-slate-800 bg-slate-900/80 p-5 shadow-2xl shadow-black/30 backdrop-blur-xl sm:rounded-[2rem] sm:p-8">
             <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-              <div>
+              <div className="min-w-0">
                 <UserGreeting />
                 <p className="mt-3 max-w-2xl text-sm text-slate-400 sm:text-base">
                   Here’s your activity overview. Everything important is laid out so you can move fast.
                 </p>
               </div>
-              <div className="flex items-center gap-3">
-                <button className="inline-flex items-center justify-center rounded-3xl bg-violet-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-violet-400">
+              <div className="flex w-full items-center gap-3 lg:w-auto lg:shrink-0">
+                <button className="inline-flex flex-1 items-center justify-center rounded-3xl bg-violet-500 px-4 py-3 text-sm font-semibold text-white transition hover:bg-violet-400 lg:flex-none lg:px-5">
                   + Quick Add
                 </button>
                 <AccountMenu />
@@ -26,7 +26,7 @@ export default function Dashboard() {
             </div>
           </header>
 
-          <div className="grid gap-4 lg:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             <article className="rounded-[2rem] border border-slate-800 bg-slate-900/70 p-6 shadow-2xl shadow-black/20 backdrop-blur-xl">
               <p className="text-sm uppercase tracking-[0.22em] text-cyan-200/80">Steam</p>
               <h2 className="mt-4 text-5xl font-semibold">47.2</h2>
@@ -52,9 +52,51 @@ export default function Dashboard() {
               </div>
             </article>
           </div>
+          <section className="rounded-3xl border border-slate-800 bg-slate-900/80 p-5 shadow-2xl shadow-black/20 backdrop-blur-xl sm:rounded-[2rem] sm:p-6">
+  <div className="flex flex-wrap items-center justify-between gap-3">
+    <div>
+      <p className="text-sm uppercase tracking-[0.22em] text-cyan-300">
+        Tasks
+      </p>
+      <h2 className="mt-2 text-2xl font-semibold">Task summary</h2>
+    </div>
+    <span className="rounded-2xl border border-cyan-500/20 bg-cyan-500/10 px-4 py-2 text-sm text-cyan-200">
+      3 of 5 complete
+    </span>
+  </div>
 
-          <div className="grid gap-6 lg:grid-cols-[1.55fr_0.85fr]">
-            <div className="grid gap-6">
+  <div className="mt-6 grid gap-3 sm:grid-cols-3">
+    {[
+      { label: "Total tasks", value: "5", color: "text-white" },
+      { label: "Completed", value: "3", color: "text-emerald-300" },
+      { label: "Remaining", value: "2", color: "text-amber-300" },
+    ].map((item) => (
+      <div
+        key={item.label}
+        className="rounded-2xl border border-slate-800 bg-slate-950/60 p-4"
+      >
+        <p className="text-sm text-slate-400">{item.label}</p>
+        <p className={`mt-2 text-3xl font-semibold ${item.color}`}>
+          {item.value}
+        </p>
+      </div>
+    ))}
+  </div>
+
+  <div
+    className="mt-5 h-2 overflow-hidden rounded-full bg-slate-800"
+    role="progressbar"
+    aria-label="Tasks completed"
+    aria-valuenow={3}
+    aria-valuemin={0}
+    aria-valuemax={5}
+  >
+    <div className="h-full w-3/5 rounded-full bg-emerald-400" />
+  </div>
+</section>
+
+          <div className="grid min-w-0 gap-4 sm:gap-6 lg:grid-cols-[minmax(0,1.55fr)_minmax(0,0.85fr)]">
+            <div className="grid min-w-0 gap-4 sm:gap-6">
               <div className="rounded-[2rem] border border-slate-800 bg-slate-900/80 p-6 shadow-2xl shadow-black/20 backdrop-blur-xl">
                 <div className="flex flex-wrap items-center justify-between gap-4">
                   <div>
@@ -68,14 +110,14 @@ export default function Dashboard() {
                   </div>
                 </div>
 
-                <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                <div className="mt-6 grid grid-cols-2 gap-3 sm:gap-4 2xl:grid-cols-4">
                   {[
                     { label: "Focus", value: "3" },
                     { label: "Progress", value: "76%" },
                     { label: "Energy", value: "High" },
                     { label: "Notes", value: "12" },
                   ].map((item) => (
-                    <div key={item.label} className="rounded-3xl border border-slate-800 bg-slate-950/60 p-5">
+                    <div key={item.label} className="min-w-0 rounded-3xl border border-slate-800 bg-slate-950/60 p-4 sm:p-5">
                       <p className="text-xs uppercase tracking-[0.22em] text-cyan-200/80">
                         {item.label}
                       </p>
@@ -85,7 +127,7 @@ export default function Dashboard() {
                 </div>
               </div>
 
-              <div className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
+              <div className="grid min-w-0 gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-1 2xl:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
                 <section className="rounded-[2rem] border border-slate-800 bg-slate-900/80 p-6 shadow-2xl shadow-black/20 backdrop-blur-xl">
                   <p className="text-sm uppercase tracking-[0.24em] text-cyan-300">
                     Agenda
@@ -139,7 +181,7 @@ export default function Dashboard() {
                 </section>
               </div>
             </div>
-            <div className="space-y-6">
+            <div className="min-w-0 space-y-6">
               <FocusTimer />
               <NotesBoard />
             </div>

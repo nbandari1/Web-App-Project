@@ -97,7 +97,7 @@ export default function FocusTimer() {
   };
 
   return (
-    <section className="rounded-[2rem] border border-slate-800 bg-slate-950/90 p-6 shadow-2xl shadow-black/30 backdrop-blur-xl">
+    <section className="min-w-0 rounded-[2rem] border border-slate-800 bg-slate-950/90 p-4 shadow-2xl shadow-black/30 backdrop-blur-xl sm:p-6">
       <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p className="text-sm uppercase tracking-[0.32em] text-cyan-300">Focus Timer</p>
@@ -109,12 +109,12 @@ export default function FocusTimer() {
       </div>
 
       <div className="mt-8 flex flex-col items-center gap-6">
-        <div className="relative flex h-72 w-72 items-center justify-center rounded-full bg-slate-900/95 shadow-[inset_0_0_0_1px_rgba(148,163,184,0.08)]">
+        <div className="relative flex aspect-square w-full max-w-72 items-center justify-center rounded-full bg-slate-900/95 shadow-[inset_0_0_0_1px_rgba(148,163,184,0.08)]">
           <div className="absolute inset-0 rounded-full border border-slate-700/70" />
           <div className="absolute inset-6 rounded-full bg-slate-950/90" />
           <div className="absolute inset-0 rounded-full bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 opacity-90" />
           <div className="relative text-center">
-            <p className="text-6xl font-semibold tracking-tight text-white">{formatTime(remainingSeconds)}</p>
+            <p className="text-5xl font-semibold tracking-tight text-white sm:text-6xl">{formatTime(remainingSeconds)}</p>
             <p className="mt-2 text-sm uppercase tracking-[0.24em] text-slate-400">remaining</p>
           </div>
           <div className="pointer-events-none absolute inset-0 rounded-full border border-cyan-400/20" />
@@ -123,7 +123,7 @@ export default function FocusTimer() {
         <p className="text-sm text-slate-400">Focus</p>
       </div>
 
-      <div className="mt-8 grid gap-4 sm:grid-cols-[1.15fr_1fr]">
+      <div className="mt-8 grid gap-4 2xl:grid-cols-[1.15fr_1fr]">
         <label className="flex items-center justify-between rounded-3xl border border-slate-800 bg-slate-900/80 px-4 py-3 text-sm text-slate-200 shadow-inner shadow-slate-950/30">
           <span className="text-slate-400">Minutes</span>
           <input
