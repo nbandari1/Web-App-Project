@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import argon2 from "argon2";
 import { Request, Response } from "express";
 import { db } from "./src/config/firebase";
 import noteRoutes from "./src/routes/noteRoutes";
@@ -52,10 +53,22 @@ app.post("/auth/login", async (req: Request, res: Response) => {
     }
 
     const userData = snapshot.docs[0]?.data() as
-      | { id?: string; name?: string; email?: string; password?: string }
+      | { id?: string; name?: string; email?: string; passwordHash?: string }
       | undefined;
 
-    if (!userData || userData.password !== password) {
+    if (!userData || !userData.passwordHash) {
+      res.status(401).json({ success: false, message: "Invalid email or password." });
+      return;
+    }
+
+    try {
+      const isPasswordValid = await argon2.verify(userData.passwordHash, password);
+
+      if (!isPasswordValid) {
+        res.status(401).json({ success: false, message: "Invalid email or password." });
+        return;
+      }
+    } catch {
       res.status(401).json({ success: false, message: "Invalid email or password." });
       return;
     }
