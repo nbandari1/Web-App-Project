@@ -2,6 +2,7 @@ import UserGreeting from "@/components/dashboard/UserGreeting";
 import NotesBoard from "@/components/dashboard/NotesBoard";
 import FocusTimer from "@/components/dashboard/FocusTimer";
 import AccountMenu from "@/components/dashboard/AccountMenu";
+import ConnectedAccountsCard from "@/components/dashboard/ConnectedAccountsCard";
 
 export default function Dashboard() {
   return (
@@ -182,6 +183,7 @@ export default function Dashboard() {
               </div>
             </div>
             <div className="min-w-0 space-y-6">
+              <ConnectedAccountsCard />
               <FocusTimer />
               <NotesBoard />
             </div>
