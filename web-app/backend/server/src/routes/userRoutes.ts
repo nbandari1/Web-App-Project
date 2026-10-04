@@ -1,4 +1,5 @@
 import express, { Request, Response } from "express";
+import argon2 from "argon2";
 import { db } from "../config/firebase";
 
 const router = express.Router();
@@ -7,7 +8,6 @@ type FirestoreUser = {
   id: string;
   name: string | undefined;
   email: string | undefined;
-  password: string | undefined;
   createdAt: string | null;
 };
 
@@ -27,7 +27,6 @@ function serializeUser(
     id: typeof data.id === "string" && data.id ? data.id : doc.id,
     name: typeof data.name === "string" ? data.name : undefined,
     email: typeof data.email === "string" ? data.email : undefined,
-    password: typeof data.password === "string" ? data.password : undefined,
     createdAt,
   };
 }
@@ -56,12 +55,14 @@ router.post("/", async (req: Request, res: Response) => {
     }
 
     const newUserRef = db.collection("users").doc();
+    // Store only a password hash to avoid persisting plaintext credentials.
+    const passwordHash = await argon2.hash(password);
 
     await newUserRef.set({
       id: newUserRef.id,
       name: String(name).trim(),
       email: normalizedEmail,
-      password,
+      passwordHash,
       createdAt: new Date(),
     });
 

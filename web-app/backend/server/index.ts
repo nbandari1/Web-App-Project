@@ -1,15 +1,24 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import argon2 from "argon2";
+import jwt from "jsonwebtoken";
 import { Request, Response } from "express";
 import { db } from "./src/config/firebase";
 import noteRoutes from "./src/routes/noteRoutes";
 import userRoutes from "./src/routes/userRoutes";
+import authMiddleware from "./src/middleware/authMiddleware";
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const JWT_COOKIE_NAME = "auth_token";
+const JWT_SECRET = process.env.JWT_SECRET;
+
+if (!JWT_SECRET) {
+  throw new Error("JWT_SECRET is not defined");
+}
 
 app.use(
   cors({
@@ -52,18 +61,42 @@ app.post("/auth/login", async (req: Request, res: Response) => {
     }
 
     const userData = snapshot.docs[0]?.data() as
-      | { id?: string; name?: string; email?: string; password?: string }
+      | { id?: string; name?: string; email?: string; passwordHash?: string }
       | undefined;
 
-    if (!userData || userData.password !== password) {
+    if (!userData || !userData.passwordHash) {
       res.status(401).json({ success: false, message: "Invalid email or password." });
       return;
     }
 
+    try {
+      const isPasswordValid = await argon2.verify(userData.passwordHash, password);
+
+      if (!isPasswordValid) {
+        res.status(401).json({ success: false, message: "Invalid email or password." });
+        return;
+      }
+    } catch {
+      res.status(401).json({ success: false, message: "Invalid email or password." });
+      return;
+    }
+
+    const userId = userData.id ?? snapshot.docs[0]?.id;
+    const token = jwt.sign({ userId }, JWT_SECRET, {
+      expiresIn: "15m",
+    });
+
+    res.cookie(JWT_COOKIE_NAME, token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 15 * 60 * 1000,
+    });
+
     res.status(200).json({
       success: true,
       user: {
-        id: userData.id ?? snapshot.docs[0]?.id,
+        id: userId,
         name: userData.name,
         email: userData.email,
       },
@@ -71,6 +104,51 @@ app.post("/auth/login", async (req: Request, res: Response) => {
   } catch (error) {
     console.error("Auth check failed:", error);
     res.status(500).json({ success: false, message: "Internal server error." });
+  }
+});
+
+app.post("/auth/logout", (_req: Request, res: Response) => {
+  res.clearCookie(JWT_COOKIE_NAME, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+  });
+
+  res.status(200).json({ success: true, message: "Logged out successfully." });
+});
+
+app.get("/auth/me", authMiddleware, async (req: Request, res: Response) => {
+  const userId = req.userId;
+
+  if (!userId) {
+    return res.status(401).json({ success: false, message: "Unauthorized" });
+  }
+
+  try {
+    const userDoc = await db.collection("users").doc(userId).get();
+
+    if (!userDoc.exists) {
+      return res.status(401).json({ success: false, message: "Unauthorized" });
+    }
+
+    const userData = userDoc.data() as
+      | { id?: string; name?: string; email?: string }
+      | undefined;
+
+    if (!userData) {
+      return res.status(401).json({ success: false, message: "Unauthorized" });
+    }
+
+    return res.status(200).json({
+      success: true,
+      user: {
+        id: userData.id ?? userDoc.id,
+        name: userData.name,
+        email: userData.email,
+      },
+    });
+  } catch {
+    return res.status(401).json({ success: false, message: "Unauthorized" });
   }
 });
 
