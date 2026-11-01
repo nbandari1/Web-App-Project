@@ -1,0 +1,7 @@
+
+# Generated files and local secrets
+**/.next/
+**/node_modules/
+.env
+.env.*
+!.env.example
