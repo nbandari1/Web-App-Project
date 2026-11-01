@@ -159,6 +159,9 @@ export function createMalOAuthStore(
       return {
         encryptedTokens: data.encryptedTokens,
         providerUserId: data.providerUserId,
+        ...(data.expiresAt instanceof Timestamp
+          ? { expiresAt: data.expiresAt.toMillis() }
+          : {}),
       };
     },
 

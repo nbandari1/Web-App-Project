@@ -68,6 +68,7 @@ export interface MalOAuthStore {
   ): Promise<{
     encryptedTokens: string;
     providerUserId: string;
+    expiresAt?: number;
   } | null>;
 
   replaceCredentials(
@@ -398,9 +399,7 @@ export class MalOAuthService {
     return account;
   }
 
-  // Adapts the existing manual refresh endpoint to saved tokens.
-  async refresh(userId: string): Promise<void> {
-    const config = this.getConfig();
+  async getAccessToken(userId: string): Promise<string> {
     const current =
       await this.store.readCredentials(userId);
 
@@ -411,13 +410,103 @@ export class MalOAuthService {
       );
     }
 
-    const oldTokens = JSON.parse(
-      unseal(
-        current.encryptedTokens,
-        config.encryptionKey,
-        `mal:${userId}:tokens`,
-      ),
-    ) as MalTokens;
+    let oldTokens: MalTokens;
+
+    try {
+      const config = this.getConfig();
+      oldTokens = JSON.parse(
+        unseal(
+          current.encryptedTokens,
+          config.encryptionKey,
+          `mal:${userId}:tokens`,
+        ),
+      ) as MalTokens;
+    } catch {
+      throw new MalOAuthError(
+        401,
+        "The MAL connection needs to be reconnected.",
+      );
+    }
+
+    if (
+      typeof oldTokens.accessToken !== "string" ||
+      !oldTokens.accessToken ||
+      typeof oldTokens.refreshToken !== "string" ||
+      !oldTokens.refreshToken ||
+      oldTokens.tokenType !== "Bearer" ||
+      typeof oldTokens.expiresAt !== "number" ||
+      !Number.isSafeInteger(oldTokens.expiresAt)
+    ) {
+      throw new MalOAuthError(
+        401,
+        "The MAL connection needs to be reconnected.",
+      );
+    }
+
+    const expiresAt =
+      current.expiresAt ?? oldTokens.expiresAt;
+
+    if (
+      typeof expiresAt === "number" &&
+      expiresAt > this.now() + 5 * 60 * 1000
+    ) {
+      return oldTokens.accessToken;
+    }
+
+    return (await this.refreshTokens(
+      userId,
+      current,
+      oldTokens,
+    )).accessToken;
+  }
+
+  async refresh(userId: string): Promise<void> {
+    await this.refreshTokens(
+      userId,
+      await this.store.readCredentials(userId),
+    );
+  }
+
+  private async refreshTokens(
+    userId: string,
+    current: Awaited<ReturnType<MalOAuthStore["readCredentials"]>>,
+    oldTokens?: MalTokens,
+  ): Promise<MalTokens> {
+    const config = this.getConfig();
+
+    if (!current) {
+      throw new MalOAuthError(
+        404,
+        "No MAL account is linked.",
+      );
+    }
+
+    if (!oldTokens) {
+      try {
+        oldTokens = JSON.parse(
+          unseal(
+            current.encryptedTokens,
+            config.encryptionKey,
+            `mal:${userId}:tokens`,
+          ),
+        ) as MalTokens;
+      } catch {
+        throw new MalOAuthError(
+          401,
+          "The MAL connection needs to be reconnected.",
+        );
+      }
+    }
+
+    if (
+      typeof oldTokens.refreshToken !== "string" ||
+      !oldTokens.refreshToken
+    ) {
+      throw new MalOAuthError(
+        401,
+        "The MAL connection needs to be reconnected.",
+      );
+    }
 
     const tokens = await this.exchange(
       new URLSearchParams({
@@ -447,6 +536,8 @@ export class MalOAuthService {
         "MAL connection changed. Retry the request.",
       );
     }
+
+    return tokens;
   }
 
   private async exchange(
@@ -461,7 +552,7 @@ export class MalOAuthService {
             "application/x-www-form-urlencoded",
         },
         body,
-      }),
+      }, Boolean(fallbackRefreshToken)),
     );
 
     const refreshToken =
@@ -497,6 +588,7 @@ export class MalOAuthService {
   private async fetchJson(
     url: string,
     options: RequestInit,
+    refreshTokenRequest = false,
   ): Promise<unknown> {
     try {
       const response = await this.request(url, {
@@ -506,11 +598,23 @@ export class MalOAuthService {
       });
 
       if (!response.ok) {
+        if (
+          refreshTokenRequest &&
+          [400, 401, 403].includes(response.status)
+        ) {
+          throw new MalOAuthError(
+            401,
+            "The MAL connection has expired. Reconnect MAL and try again.",
+          );
+        }
         throw new Error("Provider rejected request");
       }
 
       return await response.json();
-    } catch {
+    } catch (error) {
+      if (error instanceof MalOAuthError) {
+        throw error;
+      }
       throw new MalOAuthError(
         502,
         "MAL authorization request failed. Please try linking again.",

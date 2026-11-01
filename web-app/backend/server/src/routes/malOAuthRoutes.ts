@@ -183,6 +183,7 @@ export function createMalOAuthRouter(
     callback,
   );
 
+  // MAL connection status and unlink endpoints will be added here by the teammate.
   router.post(
     "/token/refresh",
     privateResponse,
