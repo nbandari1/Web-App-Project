@@ -21,6 +21,9 @@ export default function Dashboard() {
                 <button className="inline-flex items-center justify-center rounded-3xl bg-violet-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-violet-400">
                   + Quick Add
                 </button>
+                <a href="/api/mal/authorize">
+              Connect MyAnimeList
+</a>
                 <AccountMenu />
               </div>
             </div>
