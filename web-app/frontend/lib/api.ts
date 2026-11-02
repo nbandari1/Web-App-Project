@@ -53,6 +53,22 @@ export type NoteRecord = {
   createdAt?: string | null;
 };
 
+export type TaskPayload = {
+  title: string;
+  description?: string;
+  dueDate?: string;
+};
+
+export type TaskRecord = {
+  id: string;
+  title: string;
+  description?: string;
+  status: "todo" | "completed";
+  dueDate?: string | null;
+  createdAt?: string | null;
+  updatedAt?: string | null;
+};
+
 export async function createUser(payload: UserPayload): Promise<UserResponse> {
   const response = await fetch(`${API_URL}/api/users`, {
     method: "POST",
@@ -232,4 +248,59 @@ export async function deleteNote(userId: string, noteId: string) {
   }
 
   return data;
+}
+
+export async function getTasks(userId: string): Promise<TaskRecord[]> {
+  const response = await fetch(`${API_URL}/api/users/${userId}/tasks`);
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.message || "Failed to fetch tasks");
+  return data;
+}
+
+export async function createTask(userId: string, payload: TaskPayload): Promise<{ task: TaskRecord }> {
+  const response = await fetch(`${API_URL}/api/users/${userId}/tasks`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.message || "Failed to create task");
+  return data;
+}
+
+export async function updateTaskStatus(userId: string, taskId: string, status: "todo" | "completed") {
+  const response = await fetch(`${API_URL}/api/users/${userId}/tasks/${taskId}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ status }),
+  });
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.message || "Failed to update task");
+  return data;
+}
+
+export async function deleteTask(userId: string, taskId: string) {
+  const response = await fetch(`${API_URL}/api/users/${userId}/tasks/${taskId}`, {
+    method: "DELETE",
+  });
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.message || "Failed to delete task");
+  return data;
+}
+
+export function streamTasks({
+  userId,
+  onMessage,
+  onError,
+}: {
+  userId: string;
+  onMessage: (tasks: TaskRecord[]) => void;
+  onError?: () => void;
+}) {
+  const eventSource = new EventSource(`${API_URL}/api/users/${userId}/tasks/stream`);
+  eventSource.onmessage = (event) => {
+    onMessage(JSON.parse(event.data) as TaskRecord[]);
+  };
+  eventSource.onerror = () => onError?.();
+  return () => eventSource.close();
 }

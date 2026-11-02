@@ -177,15 +177,16 @@ export default function LoginForm() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full rounded-lg bg-[#6955d4] py-3 text-sm font-medium text-white shadow-[0_14px_34px_rgba(85,67,190,0.22)] transition hover:bg-[#7562df] disabled:cursor-not-allowed disabled:opacity-60"
+          aria-label={mode === "login" ? "Sign In" : loading ? "Creating Account" : "Create Account"}
+          className={`w-full disabled:cursor-not-allowed disabled:opacity-60 ${
+            mode === "login"
+              ? "h-[54px] overflow-hidden rounded-lg bg-[url('/images/Sign-in-button.png')] bg-cover bg-center"
+              : "rounded-lg bg-[#6955d4] py-3 text-sm font-medium text-white shadow-[0_14px_34px_rgba(85,67,190,0.22)] transition hover:bg-[#7562df]"
+          }`}
         >
-          {loading
-            ? mode === "signup"
-              ? "Creating Account..."
-              : "Signing In..."
-            : mode === "signup"
-              ? "Create Account"
-              : "Sign In"}
+          {mode === "signup" ? (
+            loading ? "Creating Account..." : "Create Account"
+          ) : null}
         </button>
       </form>
 

@@ -113,7 +113,7 @@ export default function NotesBoard() {
   return (
     <section
       id="notes-board"
-      className="rounded-[2rem] border border-slate-800 bg-slate-900/75 p-6 shadow-2xl shadow-black/30 backdrop-blur-xl sm:p-8"
+      className="h-full overflow-y-auto rounded-[2rem] border border-slate-800 bg-slate-900/75 p-6 shadow-2xl shadow-black/30 backdrop-blur-xl sm:p-8"
     >
       <div className="flex items-center justify-between gap-4">
         <div>
@@ -156,7 +156,7 @@ export default function NotesBoard() {
       </form>
 
       {error ? (
-        <p className="mt-4 rounded-2xl border border-rose-500/20 bg-rose-500/10 px-4 py-3 text-sm text-rose-200">
+        <p className="mt-4 rounded-2xl border border-slate-700 bg-slate-950/60 px-4 py-3 text-sm text-slate-300">
           {error}
         </p>
       ) : null}
@@ -180,7 +180,7 @@ export default function NotesBoard() {
                 <button
                   type="button"
                   onClick={() => handleDelete(note.id)}
-                  className="rounded-full border border-slate-700 px-3 py-1 text-sm text-slate-300 transition hover:border-rose-400 hover:text-rose-200"
+                  className="rounded-full border border-slate-700 px-3 py-1 text-sm text-slate-300 transition hover:border-cyan-400 hover:text-cyan-200"
                 >
                   Delete
                 </button>

@@ -9,6 +9,7 @@ import noteRoutes from "./src/routes/noteRoutes";
 import userRoutes from "./src/routes/userRoutes";
 import authMiddleware from "./src/middleware/authMiddleware";
 import malRoutes from "./src/routes/malRoutes";
+import taskRoutes from "./src/routes/taskRoutes";
 
 dotenv.config();
 
@@ -39,6 +40,7 @@ app.get("/", (_req, res) => {
 
 app.use("/api/users", userRoutes);
 app.use("/api/users/:userId/notes", noteRoutes);
+app.use("/api/users/:userId/tasks", taskRoutes);
 app.use("/api/mal", malRoutes);
 app.post("/auth/login", async (req: Request, res: Response) => {
   const { email, password } = req.body as { email?: string; password?: string };

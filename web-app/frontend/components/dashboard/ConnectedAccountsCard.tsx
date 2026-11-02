@@ -77,7 +77,7 @@ export default function ConnectedAccountsCard({
   return (
     <section
       aria-labelledby="connected-accounts-heading"
-      className="min-w-0 rounded-[2rem] border border-slate-800 bg-slate-900/80 p-6 shadow-2xl shadow-black/20 backdrop-blur-xl"
+      className="h-full min-w-0 overflow-y-auto rounded-[2rem] border border-slate-800 bg-slate-900/80 p-6 shadow-2xl shadow-black/20 backdrop-blur-xl"
     >
       <p className="text-sm uppercase tracking-[0.24em] text-cyan-300">
         Integrations
