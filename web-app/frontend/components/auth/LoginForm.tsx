@@ -79,17 +79,17 @@ export default function LoginForm() {
 
   return (
     <>
-      <div className="mb-6 grid grid-cols-2 gap-2 rounded-2xl border border-slate-800 bg-slate-950/70 p-1">
+      <div className="mb-6 grid grid-cols-2 gap-2 rounded-lg bg-[#111b42]/50 p-1">
         <button
           type="button"
           onClick={() => {
             setMode("signup");
             setMessage("");
           }}
-          className={`rounded-xl px-4 py-2 text-sm font-medium transition ${
+          className={`rounded-md px-4 py-2 text-sm font-medium tracking-[2px] transition ${
             mode === "signup"
-              ? "bg-blue-500 text-white"
-              : "text-slate-400 hover:text-white"
+              ? "bg-[#6d5bd6] text-white shadow-[0_8px_24px_rgba(109,91,214,0.18)]"
+              : "text-[#8794ba] hover:text-white"
           }`}
         >
           Sign Up
@@ -100,10 +100,10 @@ export default function LoginForm() {
             setMode("login");
             setMessage("");
           }}
-          className={`rounded-xl px-4 py-2 text-sm font-medium transition ${
+          className={`rounded-md px-4 py-2 text-sm font-medium tracking-[2px] transition ${
             mode === "login"
-              ? "bg-blue-500 text-white"
-              : "text-slate-400 hover:text-white"
+              ? "bg-[#6d5bd6] text-white shadow-[0_8px_24px_rgba(109,91,214,0.18)]"
+              : "text-[#8794ba] hover:text-white"
           }`}
         >
           Login
@@ -113,46 +113,71 @@ export default function LoginForm() {
       <form className="space-y-5" onSubmit={handleSubmit}>
         {mode === "signup" ? (
           <div>
-            <label className="mb-2 block text-sm text-slate-300">Name</label>
-            <input
-              id="name"
-              type="text"
-              value={formData.name}
-              onChange={handleChange}
-              className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-white"
-              placeholder="Your name"
-            />
+            <label className="mb-2 block text-xs text-[#7f89aa]">Name</label>
+            <div className="relative">
+              <svg viewBox="0 0 24 24" aria-hidden="true" className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 fill-none stroke-[#8794ba] stroke-2">
+                <circle cx="12" cy="8" r="3.25" />
+                <path d="M5.5 19c.7-3.7 3-5.5 6.5-5.5s5.8 1.8 6.5 5.5" />
+              </svg>
+              <input
+                id="name"
+                type="text"
+                value={formData.name}
+                onChange={handleChange}
+                className="w-full rounded-lg border border-[#34405e] bg-[#8b96b3]/20 py-3 pl-11 pr-4 text-sm text-white outline-none transition placeholder:text-[#69749a] focus:border-[#718cff] focus:bg-[#8b96b3]/25"
+                placeholder="Your name"
+              />
+            </div>
           </div>
         ) : null}
 
         <div>
-          <label className="mb-2 block text-sm text-slate-300">Email</label>
-          <input
-            id="email"
-            type="email"
-            value={formData.email}
-            onChange={handleChange}
-            className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-white"
-            placeholder="you@example.com"
-          />
+          <label className="mb-2 block text-xs text-[#7f89aa]">Email address</label>
+          <div className="relative">
+            <svg viewBox="0 0 24 24" aria-hidden="true" className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 fill-none stroke-[#8794ba] stroke-2">
+              <rect x="3" y="5" width="18" height="14" rx="2" />
+              <path d="m4 7 8 6 8-6" />
+            </svg>
+            <input
+              id="email"
+              type="email"
+              value={formData.email}
+              onChange={handleChange}
+              className="w-full rounded-lg border border-[#34405e] bg-[#8b96b3]/20 py-3 pl-11 pr-4 text-sm text-white outline-none transition placeholder:text-[#69749a] focus:border-[#718cff] focus:bg-[#8b96b3]/25"
+              placeholder="you@example.com"
+            />
+          </div>
         </div>
 
         <div>
-          <label className="mb-2 block text-sm text-slate-300">Password</label>
-          <input
-            id="password"
-            type="password"
-            value={formData.password}
-            onChange={handleChange}
-            className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-white"
-            placeholder="Enter password"
-          />
+          <div className="mb-2 flex items-center justify-between">
+            <label className="text-xs text-[#7f89aa]">Password</label>
+            {mode === "login" ? (
+              <button type="button" className="text-[10px] text-[#718cff] hover:text-white">
+                Forgot password
+              </button>
+            ) : null}
+          </div>
+          <div className="relative">
+            <svg viewBox="0 0 24 24" aria-hidden="true" className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 fill-none stroke-[#8794ba] stroke-2">
+              <rect x="5" y="10" width="14" height="10" rx="2" />
+              <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+            </svg>
+            <input
+              id="password"
+              type="password"
+              value={formData.password}
+              onChange={handleChange}
+              className="w-full rounded-lg border border-[#34405e] bg-[#8b96b3]/20 py-3 pl-11 pr-4 text-sm text-white outline-none transition placeholder:text-[#69749a] focus:border-[#718cff] focus:bg-[#8b96b3]/25"
+              placeholder="••••••••"
+            />
+          </div>
         </div>
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full rounded-xl bg-blue-500 py-3 font-semibold"
+          className="w-full rounded-lg bg-[#6955d4] py-3 text-sm font-medium text-white shadow-[0_14px_34px_rgba(85,67,190,0.22)] transition hover:bg-[#7562df] disabled:cursor-not-allowed disabled:opacity-60"
         >
           {loading
             ? mode === "signup"

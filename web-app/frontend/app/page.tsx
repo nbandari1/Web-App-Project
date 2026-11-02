@@ -1,18 +1,42 @@
 import LoginForm from "@/components/auth/LoginForm";
+import { M_PLUS_1p } from "next/font/google";
+
+const mPlus1P = M_PLUS_1p({
+  variable: "--font-m-plus-1p",
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+});
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-slate-950 text-white">
+    <main
+      className={`${mPlus1P.variable} min-h-screen text-white`}
+      style={{
+        backgroundColor: "#08112d",
+        fontFamily: "var(--font-m-plus-1p), sans-serif",
+        letterSpacing: "2px",
+      }}
+    >
       <div className="grid min-h-screen lg:grid-cols-2">
         <section className="relative hidden overflow-hidden lg:flex lg:flex-col lg:justify-center px-12 xl:px-20">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(59,130,246,0.18),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(168,85,247,0.14),transparent_28%)]" />
+          <div
+            className="absolute inset-x-6 top-6 bottom-6 rounded-2xl bg-cover bg-center"
+            style={{ backgroundImage: "url('/images/login_bg.png')" }}
+          />
+          <div className="absolute inset-x-6 top-6 bottom-6 rounded-2xl bg-[#07152f]/50" />
+          <div className="absolute inset-x-6 top-6 bottom-6 rounded-2xl bg-[linear-gradient(135deg,rgba(55,102,255,0.28),transparent_55%,rgba(3,9,28,0.55))]" />
 
-          <div className="relative z-10 max-w-xl">
-            <p className="inline-flex items-center rounded-full border border-slate-800 bg-slate-900/70 px-4 py-1.5 text-sm text-slate-300 backdrop-blur">
-              Activity Tracker Platform
+          <div className="relative z-10 max-w-xl pl-4">
+            <p className="inline-flex items-center gap-3 text-sm font-medium uppercase text-[#d8ddf5]/80">
+              <span className="grid h-14 w-14 place-items-center rounded-lg border border-white/10 bg-[#7160dc]/90 shadow-[0_0_24px_rgba(113,96,220,0.35)]">
+                <svg viewBox="0 0 24 24" aria-hidden="true" className="h-7 w-7 fill-white">
+                  <path d="M13 2 4.9 13h6.1l-1 9L19.1 11H13l0-9Z" />
+                </svg>
+              </span>
+              <span className="text-base normal-case text-[#adb5cf] opacity-80">ACTIVITY TRACKER</span>
             </p>
 
-            <h1 className="mt-6 text-5xl font-bold leading-tight tracking-tight">
+            <h1 className="mt-6 text-5xl font-bold leading-tight tracking-[2px]">
               Build a focused space for your tasks, notes, and daily progress.
             </h1>
 
@@ -54,18 +78,16 @@ export default function Home() {
         </section>
 
         <section className="relative flex items-center justify-center px-6 py-10 sm:px-8 lg:px-12">
-          <div className="absolute inset-0 lg:hidden bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.14),transparent_35%)]" />
+          <div className="absolute inset-0 bg-[#08112d]" />
+          <div className="absolute inset-0 opacity-60 bg-[radial-gradient(circle_at_50%_42%,rgba(74,102,211,0.14),transparent_38%)]" />
 
-          <div className="relative w-full max-w-md rounded-3xl border border-slate-800 bg-slate-900/75 p-8 shadow-2xl shadow-black/30 backdrop-blur-xl sm:p-10">
+          <div className="relative w-full max-w-md px-2 py-8 sm:px-4 sm:py-10">
             <div className="mb-8">
-              <p className="text-sm font-medium uppercase tracking-[0.24em] text-blue-400">
-                Welcome
-              </p>
-              <h2 className="mt-3 text-3xl font-bold tracking-tight">
-                Access your workspace
+              <h2 className="text-3xl font-medium text-[#718cff]">
+                Welcome back
               </h2>
-              <p className="mt-3 text-sm leading-6 text-slate-400">
-                Sign in to continue or create a new account to get started.
+              <p className="mt-2 text-sm leading-6 text-[#8c98c2]">
+                Sign in to your account to continue tracking
               </p>
             </div>
 
