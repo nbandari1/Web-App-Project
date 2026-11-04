@@ -26,7 +26,8 @@ function serializeTask(
     id: doc.id,
     title: typeof data.title === "string" ? data.title : "",
     description: typeof data.description === "string" ? data.description : "",
-    status: data.status === "completed" ? "completed" : "todo",
+    status: ["completed", "in_progress"].includes(data.status) ? data.status : "todo",
+    priority: ["low", "high"].includes(data.priority) ? data.priority : "medium",
     dueDate: serializeDate(dueDateValue),
     createdAt: serializeDate(createdAtValue),
     updatedAt: serializeDate(updatedAtValue),
@@ -49,7 +50,8 @@ router.get("/", async (req: Request, res: Response) => {
 router.post("/", async (req: Request, res: Response) => {
   try {
     const userId = getUserId(req);
-    const { title, description, dueDate } = req.body as {
+    const { title, description, dueDate, priority } = req.body as {
+      priority?: string;
       title?: string;
       description?: string;
       dueDate?: string;
@@ -58,6 +60,7 @@ router.post("/", async (req: Request, res: Response) => {
     if (!userId) return res.status(400).json({ message: "User id is required." });
     if (!title?.trim()) return res.status(400).json({ message: "Task title is required." });
 
+    if (priority !== undefined && !["low", "medium", "high"].includes(priority)) return res.status(400).json({ message: "Invalid priority." });
     const tasksRef = db.collection("users").doc(userId).collection("tasks");
     const taskRef = tasksRef.doc();
     const now = new Date();
@@ -65,6 +68,7 @@ router.post("/", async (req: Request, res: Response) => {
       title: title.trim(),
       description: description?.trim() || "",
       status: "todo",
+      priority: priority ?? "medium",
       dueDate: dueDate?.trim() || null,
       createdAt: now,
       updatedAt: now,
@@ -85,7 +89,7 @@ router.patch("/:taskId", async (req: Request, res: Response) => {
     const { status } = req.body as { status?: string };
 
     if (!userId || !taskId) return res.status(400).json({ message: "User id and task id are required." });
-    if (!["todo", "completed"].includes(status ?? "")) {
+    if (!["todo", "in_progress", "completed"].includes(status ?? "")) {
       return res.status(400).json({ message: "Invalid task status." });
     }
 
