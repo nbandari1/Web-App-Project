@@ -9,6 +9,7 @@ import {
   type TaskRecord,
 } from "@/lib/api";
 import { getStoredUser } from "@/lib/currentUser";
+import { filterTasks } from "@/lib/taskFilters";
 import AddTaskModal from "@/components/dashboard/AddTaskModal";
 
 function formatDueDate(value?: string | null) {
@@ -29,6 +30,9 @@ export default function Tasks() {
   const [userId] = useState(() => getStoredUser()?.id ?? "");
   const [tasks, setTasks] = useState<TaskRecord[]>([]);
   const [error, setError] = useState("");
+  const [query, setQuery] = useState("");
+  const [status, setStatus] = useState("all");
+  const [priority, setPriority] = useState("all");
   const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
@@ -54,6 +58,8 @@ export default function Tasks() {
     if (first.status !== second.status) return first.status === "completed" ? 1 : -1;
     return deadlineTime(first.dueDate) - deadlineTime(second.dueDate);
   });
+
+  const visibleTasks = filterTasks(rankedTasks, query, status, priority);
 
   const completed = tasks.filter((task) => task.status === "completed").length;
   const remaining = tasks.length - completed;
@@ -131,8 +137,15 @@ export default function Tasks() {
         <p className="mt-4 rounded-xl border border-slate-700 bg-slate-950/60 px-3 py-2 text-sm text-slate-300">{error}</p>
       )}
 
+      <div className="mt-5 flex flex-wrap gap-2">
+        <input aria-label="Search tasks" placeholder="Search task titles" className="min-w-0 rounded-xl bg-slate-950 p-2" value={query} onChange={e => setQuery(e.target.value)} />
+        <select aria-label="Filter task status" className="rounded-xl bg-slate-950 p-2" value={status} onChange={e => setStatus(e.target.value)}><option value="all">All statuses</option><option value="todo">To Do</option><option value="in_progress">In Progress</option><option value="completed">Completed</option></select>
+        <select aria-label="Filter task priority" className="rounded-xl bg-slate-950 p-2" value={priority} onChange={e => setPriority(e.target.value)}><option value="all">All priorities</option><option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option></select>
+        <button onClick={() => { setQuery(""); setStatus("all"); setPriority("all"); }}>Clear filters</button>
+      </div>
+      <p aria-live="polite" className="mt-2 text-sm text-slate-400">{visibleTasks.length} matching tasks</p>
       <div className="mt-5 space-y-3">
-        {rankedTasks.map((task) => {
+        {visibleTasks.map((task) => {
           const remainingPriority = remainingPriorityById.get(task.id);
 
           return (
@@ -148,13 +161,15 @@ export default function Tasks() {
                 <div className="flex flex-wrap items-center gap-2">
                   {remainingPriority !== undefined && (
                     <span className="rounded-full border border-cyan-400/30 bg-cyan-400/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-cyan-300">
-                      Priority {remainingPriority}
+                      Deadline rank {remainingPriority}
                     </span>
                   )}
                   <p className={`font-semibold ${task.status === "completed" ? "text-slate-500 line-through" : "text-white"}`}>
                     {task.title}
                   </p>
                 </div>
+                <p className="text-xs text-cyan-300">{task.priority ?? "medium"} priority</p>
+                <select aria-label={`Status for ${task.title}`} className="mt-2 rounded bg-slate-900 p-1 text-sm" value={task.status} onChange={async e => { try { await updateTaskStatus(userId, task.id, e.target.value as TaskRecord["status"]); } catch (err) { setError(err instanceof Error ? err.message : "Update failed"); } }}><option value="todo">To Do</option><option value="in_progress">In Progress</option><option value="completed">Completed</option></select>
                 {task.description && <p className="mt-1 text-sm text-slate-400">{task.description}</p>}
                 <p className="mt-2 text-xs text-cyan-300">{formatDueDate(task.dueDate)}</p>
               </div>
@@ -169,9 +184,9 @@ export default function Tasks() {
           );
         })}
 
-        {!tasks.length && (
+        {!visibleTasks.length && (
           <div className="rounded-2xl border border-dashed border-slate-700 bg-slate-950/40 p-6 text-center">
-            <p className="text-sm text-slate-400">No tasks yet.</p>
+            <p className="text-sm text-slate-400">{tasks.length ? "No tasks match your filters." : "No tasks yet."}</p>
           </div>
         )}
       </div>

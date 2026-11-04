@@ -5,7 +5,9 @@ import express, {
 
 import { db } from "../config/firebase";
 import { createMalOAuthRouter } from "./malOAuthRoutes";
-import { MalOAuthService } from "../routes/malOAuth";
+import { normalizeMalEntry } from "../activity";
+import authMiddleware from "../middleware/authMiddleware";
+import { MalOAuthError, MalOAuthService } from "../routes/malOAuth";
 import { createMalOAuthStore } from "./malOAuthStore";
 
 const router = express.Router();
@@ -13,13 +15,33 @@ const router = express.Router();
 const MAL_API_URL =
   "https://api.myanimelist.net/v2";
 
-router.use(
-  createMalOAuthRouter(
-    new MalOAuthService(
-      createMalOAuthStore(db),
-    ),
-  ),
-);
+const malService = new MalOAuthService(createMalOAuthStore(db));
+router.use(createMalOAuthRouter(malService));
+
+router.get("/activity", authMiddleware, async (req, res) => {
+  res.setHeader("Cache-Control", "no-store");
+  try {
+    const token = await malService.getAccessToken(req.userId!);
+    let offset = 0;
+    const entries: { title: string; episodes: number; seconds: number | null }[] = [];
+    for (let page = 0; page < 100; page++) {
+      const response = await fetch(`${MAL_API_URL}/users/@me/animelist?limit=1000&offset=${offset}&fields=list_status,num_episodes,average_episode_duration`, {
+        headers: { Authorization: `Bearer ${token}` }, signal: AbortSignal.timeout(15000),
+      });
+      if (!response.ok) throw new Error("MAL activity request failed. Try reconnecting your account.");
+      const body = await response.json();
+      for (const item of body.data ?? []) {
+        const entry = normalizeMalEntry(item);
+        if (entry) entries.push(entry);
+      }
+      if (!body.paging?.next) return res.json({ entries, kind: "estimated", historyAvailable: false });
+      offset += 1000;
+    }
+    return res.status(502).json({ message: "MAL list exceeded the supported size; totals were not returned to avoid partial estimates." });
+  } catch (error) {
+    return res.status(error instanceof MalOAuthError ? error.status : 502).json({ message: error instanceof Error ? error.message : "MAL activity is unavailable." });
+  }
+});
 
 function getMalClientId() {
   const clientId = process.env.MAL_CLIENT_ID;
