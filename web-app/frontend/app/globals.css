@@ -145,8 +145,8 @@ html[data-dashboard-theme] {
     color-scheme: light;
     background-color: #e8eef6;
     --dashboard-canvas: #e8eef6;
-    --dashboard-artwork: none;
-    --dashboard-header: none;
+    --dashboard-artwork: linear-gradient(rgb(241 245 249 / 65%), rgb(241 245 249 / 65%)), url('/images/Bg_dashboard.png');
+    --dashboard-header: linear-gradient(rgb(255 255 255 / 82%), rgb(255 255 255 / 82%)), url('/images/dashboard_top_bg.png');
     --dashboard-on-accent: #fff;
     --color-white: #0f172a;
     --color-slate-100: #334155;

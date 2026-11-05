@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type ConnectablePlatform = "steam" | "myanimelist";
 type Platform = ConnectablePlatform | "spotify";
@@ -57,6 +57,45 @@ export default function ConnectedAccountsCard({
 }: Props) {
   const [feedback, setFeedback] = useState<{ platform: string } | null>(null);
 
+  const [malStatus, setMalStatus] = useState<"loading" | "connected" | "disconnected" | "unavailable">("loading");
+
+  const [disconnecting, setDisconnecting] = useState(false);
+  const [disconnectError, setDisconnectError] = useState("");
+
+  const disconnectDialog = useRef<HTMLDialogElement>(null);
+
+  async function disconnectMal() {
+    if (disconnecting) return;
+    setDisconnecting(true);
+    setDisconnectError("");
+    try {
+      const response = await fetch("/api/mal/connection", { method: "DELETE" });
+      if (!response.ok) throw new Error("Disconnect failed");
+      setMalStatus("disconnected");
+      window.location.reload();
+    } catch {
+      setDisconnectError("Could not disconnect MyAnimeList. Please try again.");
+    } finally {
+      setDisconnecting(false);
+    }
+  }
+
+  useEffect(() => {
+    const controller = new AbortController();
+    fetch("/api/mal/status", { cache: "no-store", signal: controller.signal })
+      .then(async (response) => {
+        if (!response.ok) throw new Error("Connection status unavailable");
+        const data = await response.json();
+        if (typeof data.connected !== "boolean") throw new Error("Invalid connection status");
+        if (!controller.signal.aborted) setMalStatus(data.connected ? "connected" : "disconnected");
+      })
+      .catch(() => {
+        if (!controller.signal.aborted) setMalStatus("unavailable");
+      });
+
+    return () => controller.abort();
+  }, []);
+
   useEffect(() => {
     if (!feedback) return;
 
@@ -68,6 +107,11 @@ export default function ConnectedAccountsCard({
     if (onConnect) {
       setFeedback(null);
       onConnect(platform);
+      return;
+    }
+
+    if (platform === "myanimelist") {
+      window.location.assign("/api/mal/authorize");
       return;
     }
 
@@ -94,13 +138,17 @@ export default function ConnectedAccountsCard({
 
       <ul className="mt-6 space-y-4">
         {platforms.map(({ id, name }) => {
-          const comingSoon = id === "spotify";
-          const connected = id !== "spotify" && connectedAccounts[id] === true;
+          const comingSoon = id !== "myanimelist";
+          const connected = id === "myanimelist" && (connectedAccounts[id] ?? (malStatus === "connected"));
           const status = comingSoon
             ? "Coming Soon"
             : connected
               ? "Connected"
-              : "Disconnected";
+              : malStatus === "loading"
+                ? "Checking…"
+                : malStatus === "unavailable"
+                  ? "Status unavailable"
+                  : "Disconnected";
           const statusClass = comingSoon
             ? "border-amber-500/20 bg-amber-500/10 text-amber-200"
             : connected
@@ -127,7 +175,19 @@ export default function ConnectedAccountsCard({
                   </span>
                 </div>
               </div>
-              {id !== "spotify" && !connected ? (
+              {connected ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setDisconnectError("");
+                    disconnectDialog.current?.showModal();
+                  }}
+                  disabled={disconnecting}
+                  className="rounded-2xl border border-slate-600 px-4 py-2 text-sm font-semibold disabled:opacity-50"
+                >
+                  {disconnecting ? "Disconnecting…" : "Disconnect"}
+                </button>
+              ) : !comingSoon && malStatus !== "loading" ? (
                 <button
                   type="button"
                   onClick={() => handleConnect(id, name)}
@@ -150,6 +210,40 @@ export default function ConnectedAccountsCard({
           </p>
         ) : null}
       </div>
+      <dialog
+        ref={disconnectDialog}
+        aria-labelledby="mal-disconnect-title"
+        aria-describedby="mal-disconnect-description"
+        onCancel={(event) => { if (disconnecting) event.preventDefault(); }}
+        className="m-auto w-[calc(100%_-_2rem)] max-w-sm rounded-3xl border border-slate-700 bg-slate-950 p-6 text-white shadow-2xl backdrop:bg-black/60"
+      >
+        <h3 id="mal-disconnect-title" className="text-xl font-semibold">
+          Disconnect MyAnimeList?
+        </h3>
+        <p id="mal-disconnect-description" className="mt-2 text-sm text-slate-400">
+          Activity Tracker will stop syncing your anime activity. Your MyAnimeList account and anime list will stay as they are.
+        </p>
+        {disconnectError && <p role="alert" className="mt-3 text-sm text-red-200">{disconnectError}</p>}
+        <div className="mt-6 flex flex-wrap justify-end gap-3">
+          <button
+            type="button"
+            autoFocus
+            disabled={disconnecting}
+            onClick={() => disconnectDialog.current?.close()}
+            className="rounded-xl border border-slate-700 px-4 py-2 text-sm font-semibold disabled:opacity-50"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            disabled={disconnecting}
+            onClick={disconnectMal}
+            className="rounded-xl bg-red-700 px-4 py-2 text-sm font-semibold text-[#fff] hover:bg-red-600 disabled:opacity-50"
+          >
+            {disconnecting ? "Disconnecting…" : "Disconnect"}
+          </button>
+        </div>
+      </dialog>
     </section>
   );
 }

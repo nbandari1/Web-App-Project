@@ -154,7 +154,7 @@ export default function Settings({ theme, onThemeChange, preferences, onPreferen
         </div>
 
         <label className="mt-4 grid gap-1 text-sm">
-          Background (dark theme)
+          Background
           <select
             className="rounded-xl border border-slate-700 bg-slate-900 p-2"
             value={theme}

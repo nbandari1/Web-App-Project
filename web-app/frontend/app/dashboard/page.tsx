@@ -32,6 +32,7 @@ const DEFAULT_DASHBOARD_LAYOUT: Layout = [
 const DASHBOARD_LAYOUT_VERSION = "v14";
 
 export default function Dashboard() {
+  const [gridReady, setGridReady] = useState(false);
   const [preferences, setPreferences] = useState(defaults);
   const [theme, setTheme] = useState<"classic" | "new">("new");
   const preferenceKey = useRef("");
@@ -42,6 +43,7 @@ export default function Dashboard() {
     preferenceKey.current = `dashboard-preferences:${userId}`;
     artworkKey.current = `dashboard-theme:${userId}`;
     setPreferences(readPreferences(preferenceKey.current));
+    setGridReady(true);
     setTheme(localStorage.getItem(artworkKey.current) === "classic" ? "classic" : "new");
   }, []);
 
@@ -144,9 +146,6 @@ export default function Dashboard() {
                 </p>
               </div>
               <div className="flex w-full items-center gap-3 lg:w-auto lg:shrink-0">
-                <a href="/api/mal/authorize">
-              Connect MyAnimeList
-</a>
                 <button
                   type="button"
                   onClick={() => {
@@ -189,7 +188,7 @@ export default function Dashboard() {
               }
             }}
           >
-            {mounted && (
+            {gridReady && mounted && (
               <ReactGridLayout
                 width={width}
                 layout={width < 768 ? visibleLayout.map((item, index) => ({ ...item, x: 0, w: 1, minW: 1, y: index })) : visibleLayout}
