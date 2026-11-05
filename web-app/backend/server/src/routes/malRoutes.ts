@@ -18,6 +18,35 @@ const MAL_API_URL =
 const malService = new MalOAuthService(createMalOAuthStore(db));
 router.use(createMalOAuthRouter(malService));
 
+router.get("/status", authMiddleware, async (req, res) => {
+  res.setHeader("Cache-Control", "no-store");
+  if (!req.userId) return res.status(401).json({ message: "Unauthorized" });
+
+  try {
+    const connection = await db.collection("users").doc(req.userId)
+      .collection("linkedServices").doc("mal").get();
+    return res.json({ connected: connection.data()?.connected === true });
+  } catch {
+    return res.status(503).json({ message: "Connection status unavailable" });
+  }
+});
+
+router.delete("/connection", authMiddleware, async (req, res) => {
+  res.setHeader("Cache-Control", "no-store");
+  if (!req.userId) return res.status(401).json({ message: "Unauthorized" });
+
+  try {
+    const batch = db.batch();
+    batch.delete(db.collection("users").doc(req.userId)
+      .collection("linkedServices").doc("mal"));
+    batch.delete(db.collection("_malCredentials").doc(req.userId));
+    await batch.commit();
+    return res.json({ connected: false });
+  } catch {
+    return res.status(503).json({ message: "Could not disconnect MyAnimeList" });
+  }
+});
+
 router.get("/activity", authMiddleware, async (req, res) => {
   res.setHeader("Cache-Control", "no-store");
   try {
