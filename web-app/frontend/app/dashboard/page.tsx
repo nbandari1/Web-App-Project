@@ -16,6 +16,8 @@ import Tasks from "@/components/dashboard/Tasks";
 import Reminders from "@/components/dashboard/Reminders";
 import { getStoredUser } from "@/lib/currentUser";
 
+import { defaults, readPreferences, type Preferences, type WidgetId } from "@/lib/dashboardPreferences";
+
 const DEFAULT_DASHBOARD_LAYOUT: Layout = [
   { i: "steam", x: 0, y: 0, w: 4, h: 4, minW: 2, minH: 3 },
   { i: "spotify", x: 4, y: 0, w: 4, h: 4, minW: 2, minH: 3 },
@@ -30,13 +32,39 @@ const DEFAULT_DASHBOARD_LAYOUT: Layout = [
 const DASHBOARD_LAYOUT_VERSION = "v14";
 
 export default function Dashboard() {
-  const [theme, setTheme] = useState<"classic" | "new">(() => {
-    if (typeof window === "undefined") return "new";
-    const storedUser = getStoredUser();
-    return storedUser?.id && window.localStorage.getItem(`dashboard-theme:${storedUser.id}`) === "classic"
-      ? "classic"
-      : "new";
-  });
+  const [preferences, setPreferences] = useState(defaults);
+  const [theme, setTheme] = useState<"classic" | "new">("new");
+  const preferenceKey = useRef("");
+  const artworkKey = useRef("");
+
+  useEffect(() => {
+    const userId = getStoredUser()?.id ?? "guest";
+    preferenceKey.current = `dashboard-preferences:${userId}`;
+    artworkKey.current = `dashboard-theme:${userId}`;
+    setPreferences(readPreferences(preferenceKey.current));
+    setTheme(localStorage.getItem(artworkKey.current) === "classic" ? "classic" : "new");
+  }, []);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    root.dataset.dashboardTheme = preferences.theme;
+    root.dataset.dashboardAccent = preferences.accent;
+    return () => {
+      delete root.dataset.dashboardTheme;
+      delete root.dataset.dashboardAccent;
+    };
+  }, [preferences.theme, preferences.accent]);
+
+  function updatePreferences(next: Preferences) {
+    setPreferences(next);
+    if (preferenceKey.current) localStorage.setItem(preferenceKey.current, JSON.stringify(next));
+  }
+
+  function chooseTheme(next: "classic" | "new") {
+    setTheme(next);
+    if (artworkKey.current) localStorage.setItem(artworkKey.current, next);
+  }
+
   const [layout, setLayout] = useState<Layout>(() => {
     if (typeof window === "undefined") return DEFAULT_DASHBOARD_LAYOUT;
     const savedVersion = window.localStorage.getItem("dashboard-layout-version");
@@ -87,67 +115,26 @@ export default function Dashboard() {
     if (touchHoldTimer.current !== null) window.clearTimeout(touchHoldTimer.current);
   }, []);
 
-  useEffect(() => {
-    const backgroundElements = [document.documentElement, document.body];
+  const visibleLayout = layout.filter(({ i }) => !preferences.hidden.includes(i as WidgetId));
 
-    backgroundElements.forEach((element) => {
-      element.style.backgroundColor = "#0b1224";
-      if (theme === "new") {
-        element.style.backgroundImage = "url('/images/Bg_dashboard.png')";
-        element.style.backgroundRepeat = "no-repeat";
-        element.style.backgroundPosition = "center top";
-        element.style.backgroundSize = "cover";
-        element.style.backgroundAttachment = "fixed";
-      } else {
-        element.style.backgroundImage = "none";
-        element.style.backgroundAttachment = "scroll";
-      }
-    });
-
-    return () => {
-      backgroundElements.forEach((element) => {
-        element.style.backgroundColor = "";
-        element.style.backgroundImage = "";
-        element.style.backgroundRepeat = "";
-        element.style.backgroundPosition = "";
-        element.style.backgroundSize = "";
-        element.style.backgroundAttachment = "";
-      });
-    };
-  }, [theme]);
-
-  const chooseTheme = (nextTheme: "classic" | "new") => {
-    setTheme(nextTheme);
-    const storedUser = getStoredUser();
-    const userId = storedUser?.id;
-    if (userId) {
-      window.localStorage.setItem(`dashboard-theme:${userId}`, nextTheme);
-    }
-  };
+  function saveLayout(next: Layout) {
+    if (width < 768) return;
+    const positions = new Map(next.map((item) => [item.i, item]));
+    const merged = layout.map((item) => positions.get(item.i) ?? item);
+    setLayout(merged);
+    localStorage.setItem("dashboard-layout", JSON.stringify(merged));
+    localStorage.setItem("dashboard-layout-version", DASHBOARD_LAYOUT_VERSION);
+  }
 
   return (
-    <main
-      className={`min-h-[100dvh] text-white ${
-        theme === "new" ? "" : "bg-slate-950"
-      }`}
-      style={theme === "new"
-        ? {
-            backgroundColor: "#0b1224",
-            backgroundImage: "url('/images/Bg_dashboard.png')",
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "center top",
-            backgroundSize: "cover",
-            backgroundAttachment: "fixed",
-          }
-        : { backgroundColor: "#020617" }}
-    >
+    <main className="dashboard-surface min-h-[100dvh] text-white" data-artwork={theme === "new"}>
       <section className="relative min-h-screen px-4 py-4 sm:px-6 sm:py-8">
         <div className="relative mx-auto flex w-full max-w-[1600px] flex-col gap-4 sm:gap-6">
           <header
             className={`relative z-50 overflow-visible rounded-3xl border border-slate-800 bg-slate-900/80 p-5 shadow-2xl shadow-black/30 backdrop-blur-xl sm:rounded-[2rem] sm:p-8 ${
               theme === "new" ? "bg-cover bg-center" : ""
             }`}
-            style={theme === "new" ? { backgroundImage: "url('/images/dashboard_top_bg.png')" } : undefined}
+            data-dashboard-header
           >
             <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
               <div className="min-w-0">
@@ -172,7 +159,16 @@ export default function Dashboard() {
                 >
                   Reset layout
                 </button>
-                <Settings theme={theme} onThemeChange={chooseTheme} />
+                <Settings
+                  theme={theme}
+                  onThemeChange={chooseTheme}
+                  preferences={preferences}
+                  onPreferencesChange={updatePreferences}
+                  onReset={() => {
+                    updatePreferences(defaults);
+                    chooseTheme("new");
+                  }}
+                />
               </div>
             </div>
           </header>
@@ -196,7 +192,7 @@ export default function Dashboard() {
             {mounted && (
               <ReactGridLayout
                 width={width}
-                layout={width < 768 ? layout.map((item, index) => ({ ...item, x: 0, w: 1, y: index })) : layout}
+                layout={width < 768 ? visibleLayout.map((item, index) => ({ ...item, x: 0, w: 1, minW: 1, y: index })) : visibleLayout}
                 gridConfig={{
                   cols: width < 768 ? 1 : 12,
                   rowHeight: 55,
@@ -213,47 +209,32 @@ export default function Dashboard() {
                 }}
                 resizeConfig={{ enabled: true, handles: ["se"] }}
                 compactor={verticalCompactor}
-                onLayoutChange={(nextLayout) => {
-                  if (width < 768) return;
-                }}
-                onDragStop={(nextLayout) => {
-                  setLayout(nextLayout);
-                  if (width >= 768) {
-                    window.localStorage.setItem("dashboard-layout", JSON.stringify(nextLayout));
-                    window.localStorage.setItem("dashboard-layout-version", DASHBOARD_LAYOUT_VERSION);
-                  }
-                }}
-                onResizeStop={(nextLayout) => {
-                  setLayout(nextLayout);
-                  if (width >= 768) {
-                    window.localStorage.setItem("dashboard-layout", JSON.stringify(nextLayout));
-                    window.localStorage.setItem("dashboard-layout-version", DASHBOARD_LAYOUT_VERSION);
-                  }
-                }}
+                onDragStop={saveLayout}
+                onResizeStop={saveLayout}
               >
-                <article key="steam" className="h-full min-h-0 overflow-auto rounded-[2rem] border border-slate-800 bg-slate-900/70 p-6 shadow-2xl shadow-black/20 backdrop-blur-xl">
+                {!preferences.hidden.includes("steam") && (<article key="steam" className="h-full min-h-0 overflow-auto rounded-[2rem] border border-slate-800 bg-slate-900/70 p-6 shadow-2xl shadow-black/20 backdrop-blur-xl">
                   <div className="dashboard-drag-handle absolute right-4 top-3 z-20 cursor-grab rounded-lg border border-slate-700 bg-slate-950/80 px-2 py-1 text-xs text-slate-400 active:cursor-grabbing">⋮⋮</div>
                   <p className="text-sm uppercase tracking-[0.22em] text-cyan-200/80">Steam</p>
                   <h2 className="mt-4 text-2xl font-semibold">Unavailable</h2>
                   <p className="mt-3 text-sm text-slate-400">Steam activity integration pending</p>
                   <div className="mt-6 h-2 overflow-hidden rounded-full bg-slate-800"><div className="h-2 w-0 rounded-full bg-cyan-400" /></div>
-                </article>
+                </article>)}
 
-                <article key="spotify" className="h-full min-h-0 overflow-auto rounded-[2rem] border border-slate-800 bg-slate-900/70 p-6 shadow-2xl shadow-black/20 backdrop-blur-xl">
+                {!preferences.hidden.includes("spotify") && (<article key="spotify" className="h-full min-h-0 overflow-auto rounded-[2rem] border border-slate-800 bg-slate-900/70 p-6 shadow-2xl shadow-black/20 backdrop-blur-xl">
                   <div className="dashboard-drag-handle absolute right-4 top-3 z-20 cursor-grab rounded-lg border border-slate-700 bg-slate-950/80 px-2 py-1 text-xs text-slate-400 active:cursor-grabbing">⋮⋮</div>
                   <p className="text-sm uppercase tracking-[0.22em] text-cyan-200/80">Spotify</p>
                   <h2 className="mt-4 text-2xl font-semibold">Unavailable</h2>
                   <p className="mt-3 text-sm text-slate-400">Spotify activity integration pending</p>
                   <div className="mt-6 h-2 overflow-hidden rounded-full bg-slate-800"><div className="h-2 w-0 rounded-full bg-emerald-400" /></div>
-                </article>
+                </article>)}
 
-                <article key="mal" className="h-full min-h-0 overflow-auto rounded-[2rem] border border-slate-800 bg-slate-900/70 p-6 shadow-2xl shadow-black/20 backdrop-blur-xl">
+                {!preferences.hidden.includes("mal") && (<article key="mal" className="h-full min-h-0 overflow-auto rounded-[2rem] border border-slate-800 bg-slate-900/70 p-6 shadow-2xl shadow-black/20 backdrop-blur-xl">
                   <div className="dashboard-drag-handle absolute right-4 top-3 z-20 cursor-grab rounded-lg border border-slate-700 bg-slate-950/80 px-2 py-1 text-xs text-slate-400 active:cursor-grabbing">⋮⋮</div>
                   <p className="text-sm uppercase tracking-[0.22em] text-cyan-200/80">MAL</p>
                   <h2 className="mt-4 text-2xl font-semibold">See analytics</h2>
                   <p className="mt-3 text-sm text-slate-400">Estimated lifetime activity above</p>
                   <div className="mt-6 h-2 overflow-hidden rounded-full bg-slate-800"><div className="h-2 w-0 rounded-full bg-blue-400" /></div>
-                </article>
+                </article>)}
 
                 <div key="tasks" className="h-full min-h-0 overflow-auto rounded-[2rem]">
                   <div className="dashboard-drag-handle absolute right-4 top-3 z-20 cursor-grab rounded-lg border border-slate-700 bg-slate-950/80 px-2 py-1 text-xs text-slate-400 active:cursor-grabbing">⋮⋮</div>
@@ -261,9 +242,9 @@ export default function Dashboard() {
                 </div>
 
                 <div key="accounts" className="h-full min-h-0 overflow-auto rounded-[2rem]"><div className="dashboard-drag-handle absolute right-4 top-3 z-20 cursor-grab rounded-lg border border-slate-700 bg-slate-950/80 px-2 py-1 text-xs text-slate-400 active:cursor-grabbing">⋮⋮</div><ConnectedAccountsCard /></div>
-                <div key="timer" className="h-full min-h-0 overflow-auto rounded-[2rem]"><div className="dashboard-drag-handle absolute right-4 top-3 z-20 cursor-grab rounded-lg border border-slate-700 bg-slate-950/80 px-2 py-1 text-xs text-slate-400 active:cursor-grabbing">⋮⋮</div><FocusTimer /></div>
-                <div key="notes" className="h-full min-h-0 overflow-auto rounded-[2rem]"><div className="dashboard-drag-handle absolute right-4 top-3 z-20 cursor-grab rounded-lg border border-slate-700 bg-slate-950/80 px-2 py-1 text-xs text-slate-400 active:cursor-grabbing">⋮⋮</div><NotesBoard /></div>
-                <div key="reminders" className="h-full min-h-0 overflow-auto rounded-[2rem]"><div className="dashboard-drag-handle absolute right-4 top-3 z-20 cursor-grab rounded-lg border border-slate-700 bg-slate-950/80 px-2 py-1 text-xs text-slate-400 active:cursor-grabbing">⋮⋮</div><Reminders /></div>
+                {!preferences.hidden.includes("timer") && (<div key="timer" className="h-full min-h-0 overflow-auto rounded-[2rem]"><div className="dashboard-drag-handle absolute right-4 top-3 z-20 cursor-grab rounded-lg border border-slate-700 bg-slate-950/80 px-2 py-1 text-xs text-slate-400 active:cursor-grabbing">⋮⋮</div><FocusTimer /></div>)}
+                {!preferences.hidden.includes("notes") && (<div key="notes" className="h-full min-h-0 overflow-auto rounded-[2rem]"><div className="dashboard-drag-handle absolute right-4 top-3 z-20 cursor-grab rounded-lg border border-slate-700 bg-slate-950/80 px-2 py-1 text-xs text-slate-400 active:cursor-grabbing">⋮⋮</div><NotesBoard /></div>)}
+                {!preferences.hidden.includes("reminders") && (<div key="reminders" className="h-full min-h-0 overflow-auto rounded-[2rem]"><div className="dashboard-drag-handle absolute right-4 top-3 z-20 cursor-grab rounded-lg border border-slate-700 bg-slate-950/80 px-2 py-1 text-xs text-slate-400 active:cursor-grabbing">⋮⋮</div><Reminders /></div>)}
               </ReactGridLayout>
             )}
           </div>

@@ -95,3 +95,92 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 } */
+
+html[data-dashboard-theme] {
+  color-scheme: dark;
+  --dashboard-canvas: #020617;
+  --dashboard-artwork: url('/images/Bg_dashboard.png');
+  --dashboard-header: url('/images/dashboard_top_bg.png');
+  --dashboard-on-accent: #020617;
+}
+
+html[data-dashboard-accent="violet"] {
+  --color-cyan-200: #ddd6fe;
+  --color-cyan-300: #c4b5fd;
+  --color-cyan-400: #a78bfa;
+  --color-cyan-500: #a78bfa;
+}
+
+html[data-dashboard-accent="rose"] {
+  --color-cyan-200: #fecdd3;
+  --color-cyan-300: #fda4af;
+  --color-cyan-400: #fb7185;
+  --color-cyan-500: #fb7185;
+}
+
+.dashboard-surface {
+  background-color: var(--dashboard-canvas, #020617);
+}
+
+.dashboard-surface[data-artwork="true"] {
+  background-image: var(--dashboard-artwork);
+  background-position: center top;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+.dashboard-surface[data-artwork="true"] [data-dashboard-header] {
+  background-image: var(--dashboard-header);
+}
+
+@custom-variant dashboard-light {
+  &:where(html[data-dashboard-theme="light"]) { @slot; }
+  @media (prefers-color-scheme: light) {
+    &:where(html[data-dashboard-theme="system"]) { @slot; }
+  }
+}
+
+html[data-dashboard-theme] {
+  @variant dashboard-light {
+    color-scheme: light;
+    background-color: #e8eef6;
+    --dashboard-canvas: #e8eef6;
+    --dashboard-artwork: none;
+    --dashboard-header: none;
+    --dashboard-on-accent: #fff;
+    --color-white: #0f172a;
+    --color-slate-100: #334155;
+    --color-slate-200: #334155;
+    --color-slate-300: #334155;
+    --color-slate-400: #475569;
+    --color-slate-500: #475569;
+    --color-slate-600: #e2e8f0;
+    --color-slate-700: #a6b4c7;
+    --color-slate-800: #cbd5e1;
+    --color-slate-900: #fff;
+    --color-slate-950: #f8fafc;
+    --color-emerald-200: #065f46;
+    --color-emerald-300: #065f46;
+    --color-amber-200: #78350f;
+    --color-amber-300: #78350f;
+    --color-red-200: #991b1b;
+    --dashboard-light-accent: #155e75;
+    --color-cyan-200: var(--dashboard-light-accent);
+    --color-cyan-300: var(--dashboard-light-accent);
+    --color-cyan-400: var(--dashboard-light-accent);
+    --color-cyan-500: var(--dashboard-light-accent);
+  }
+}
+
+html[data-dashboard-accent="violet"] {
+  @variant dashboard-light { --dashboard-light-accent: #5b21b6; }
+}
+
+html[data-dashboard-accent="rose"] {
+  @variant dashboard-light { --dashboard-light-accent: #9f1239; }
+}
+
+html[data-dashboard-accent] .react-grid-placeholder {
+  background: color-mix(in srgb, var(--color-cyan-400) 16%, transparent) !important;
+  border-color: color-mix(in srgb, var(--color-cyan-400) 40%, transparent);
+}
