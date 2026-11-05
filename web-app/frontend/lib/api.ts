@@ -57,13 +57,15 @@ export type TaskPayload = {
   title: string;
   description?: string;
   dueDate?: string;
+  priority?: "low" | "medium" | "high";
 };
 
 export type TaskRecord = {
   id: string;
   title: string;
   description?: string;
-  status: "todo" | "completed";
+  status: "todo" | "in_progress" | "completed";
+  priority?: "low" | "medium" | "high";
   dueDate?: string | null;
   createdAt?: string | null;
   updatedAt?: string | null;
@@ -103,6 +105,7 @@ export async function getUsers(): Promise<UserRecord[]> {
 
 export async function loginUser(payload: LoginPayload): Promise<LoginResponse> {
   const response = await fetch(`${API_URL}/auth/login`, {
+    credentials: "include",
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -268,7 +271,7 @@ export async function createTask(userId: string, payload: TaskPayload): Promise<
   return data;
 }
 
-export async function updateTaskStatus(userId: string, taskId: string, status: "todo" | "completed") {
+export async function updateTaskStatus(userId: string, taskId: string, status: "todo" | "in_progress" | "completed") {
   const response = await fetch(`${API_URL}/api/users/${userId}/tasks/${taskId}`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },

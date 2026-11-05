@@ -22,6 +22,7 @@ export default function AddTaskModal({ userId, onClose, onError }: Props) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [dueDate, setDueDate] = useState(getTodayValue());
+  const [priority, setPriority] = useState<"low" | "medium" | "high">("medium");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
@@ -52,6 +53,7 @@ export default function AddTaskModal({ userId, onClose, onError }: Props) {
         title: title.trim(),
         description: description.trim(),
         dueDate,
+        priority,
       });
       onClose();
     } catch (submitError) {
@@ -120,6 +122,7 @@ export default function AddTaskModal({ userId, onClose, onError }: Props) {
           />
         </label>
 
+        <label>Priority<select className="block rounded-xl bg-slate-950 p-2" value={priority} onChange={e => setPriority(e.target.value as typeof priority)}><option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option></select></label>
         {error && (
           <p className="rounded-xl border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-200">{error}</p>
         )}

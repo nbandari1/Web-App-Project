@@ -11,6 +11,7 @@ import NotesBoard from "@/components/dashboard/NotesBoard";
 import FocusTimer from "@/components/dashboard/FocusTimer";
 import Settings from "@/components/dashboard/Settings";
 import ConnectedAccountsCard from "@/components/dashboard/ConnectedAccountsCard";
+import ActivityAnalytics from "@/components/dashboard/ActivityAnalytics";
 import Tasks from "@/components/dashboard/Tasks";
 import Reminders from "@/components/dashboard/Reminders";
 import { getStoredUser } from "@/lib/currentUser";
@@ -172,6 +173,7 @@ export default function Dashboard() {
             </div>
           </header>
 
+          <ActivityAnalytics />
           <div
             ref={containerRef}
             className="relative"
@@ -213,25 +215,25 @@ export default function Dashboard() {
                 {!preferences.hidden.includes("steam") && (<article key="steam" className="h-full min-h-0 overflow-auto rounded-[2rem] border border-slate-800 bg-slate-900/70 p-6 shadow-2xl shadow-black/20 backdrop-blur-xl">
                   <div className="dashboard-drag-handle absolute right-4 top-3 z-20 cursor-grab rounded-lg border border-slate-700 bg-slate-950/80 px-2 py-1 text-xs text-slate-400 active:cursor-grabbing">⋮⋮</div>
                   <p className="text-sm uppercase tracking-[0.22em] text-cyan-200/80">Steam</p>
-                  <h2 className="mt-4 text-5xl font-semibold">47.2</h2>
-                  <p className="mt-3 text-sm text-slate-400">steam hours this week</p>
-                  <div className="mt-6 h-2 overflow-hidden rounded-full bg-slate-800"><div className="h-2 w-4/5 rounded-full bg-cyan-400" /></div>
+                  <h2 className="mt-4 text-2xl font-semibold">Unavailable</h2>
+                  <p className="mt-3 text-sm text-slate-400">Steam activity integration pending</p>
+                  <div className="mt-6 h-2 overflow-hidden rounded-full bg-slate-800"><div className="h-2 w-0 rounded-full bg-cyan-400" /></div>
                 </article>)}
 
                 {!preferences.hidden.includes("spotify") && (<article key="spotify" className="h-full min-h-0 overflow-auto rounded-[2rem] border border-slate-800 bg-slate-900/70 p-6 shadow-2xl shadow-black/20 backdrop-blur-xl">
                   <div className="dashboard-drag-handle absolute right-4 top-3 z-20 cursor-grab rounded-lg border border-slate-700 bg-slate-950/80 px-2 py-1 text-xs text-slate-400 active:cursor-grabbing">⋮⋮</div>
                   <p className="text-sm uppercase tracking-[0.22em] text-cyan-200/80">Spotify</p>
-                  <h2 className="mt-4 text-5xl font-semibold">312</h2>
-                  <p className="mt-3 text-sm text-slate-400">minutes today</p>
-                  <div className="mt-6 h-2 overflow-hidden rounded-full bg-slate-800"><div className="h-2 w-11/12 rounded-full bg-emerald-400" /></div>
+                  <h2 className="mt-4 text-2xl font-semibold">Unavailable</h2>
+                  <p className="mt-3 text-sm text-slate-400">Spotify activity integration pending</p>
+                  <div className="mt-6 h-2 overflow-hidden rounded-full bg-slate-800"><div className="h-2 w-0 rounded-full bg-emerald-400" /></div>
                 </article>)}
 
                 {!preferences.hidden.includes("mal") && (<article key="mal" className="h-full min-h-0 overflow-auto rounded-[2rem] border border-slate-800 bg-slate-900/70 p-6 shadow-2xl shadow-black/20 backdrop-blur-xl">
                   <div className="dashboard-drag-handle absolute right-4 top-3 z-20 cursor-grab rounded-lg border border-slate-700 bg-slate-950/80 px-2 py-1 text-xs text-slate-400 active:cursor-grabbing">⋮⋮</div>
                   <p className="text-sm uppercase tracking-[0.22em] text-cyan-200/80">MAL</p>
-                  <h2 className="mt-4 text-5xl font-semibold">18</h2>
-                  <p className="mt-3 text-sm text-slate-400">episodes this week</p>
-                  <div className="mt-6 h-2 overflow-hidden rounded-full bg-slate-800"><div className="h-2 w-3/4 rounded-full bg-blue-400" /></div>
+                  <h2 className="mt-4 text-2xl font-semibold">See analytics</h2>
+                  <p className="mt-3 text-sm text-slate-400">Estimated lifetime activity above</p>
+                  <div className="mt-6 h-2 overflow-hidden rounded-full bg-slate-800"><div className="h-2 w-0 rounded-full bg-blue-400" /></div>
                 </article>)}
 
                 <div key="tasks" className="h-full min-h-0 overflow-auto rounded-[2rem]">
