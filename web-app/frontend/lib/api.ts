@@ -4,6 +4,37 @@ if (!API_URL) {
   throw new Error("NEXT_PUBLIC_API_URL is not defined");
 }
 
+const API_BASE_URL = API_URL.replace(/\/+$/, "");
+
+export function startSteamAuthorization() {
+  window.location.assign(`${API_BASE_URL}/api/steam/authorize`);
+}
+
+export async function getSteamConnectionStatus(): Promise<boolean> {
+  const response = await fetch(`${API_BASE_URL}/api/steam/status`, {
+    credentials: "include",
+    cache: "no-store",
+  });
+  const data = await response.json();
+
+  if (!response.ok || typeof data.connected !== "boolean") {
+    throw new Error("Steam connection status is unavailable");
+  }
+
+  return data.connected;
+}
+
+export async function disconnectSteam() {
+  const response = await fetch(`${API_BASE_URL}/api/steam/connection`, {
+    method: "DELETE",
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    throw new Error("Could not disconnect Steam");
+  }
+}
+
 export type UserPayload = {
   name: string;
   email: string;

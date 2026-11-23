@@ -1,6 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import {
+  disconnectSteam,
+  getSteamConnectionStatus,
+  startSteamAuthorization,
+} from "@/lib/api";
 
 type ConnectablePlatform = "steam" | "myanimelist";
 type Platform = ConnectablePlatform | "spotify";
@@ -58,9 +63,11 @@ export default function ConnectedAccountsCard({
   const [feedback, setFeedback] = useState<{ platform: string } | null>(null);
 
   const [malStatus, setMalStatus] = useState<"loading" | "connected" | "disconnected" | "unavailable">("loading");
+  const [steamStatus, setSteamStatus] = useState<"loading" | "connected" | "disconnected" | "unavailable">("loading");
 
   const [disconnecting, setDisconnecting] = useState(false);
   const [disconnectError, setDisconnectError] = useState("");
+  const [disconnectPlatform, setDisconnectPlatform] = useState<ConnectablePlatform>("myanimelist");
 
   const disconnectDialog = useRef<HTMLDialogElement>(null);
 
@@ -75,6 +82,21 @@ export default function ConnectedAccountsCard({
       window.location.reload();
     } catch {
       setDisconnectError("Could not disconnect MyAnimeList. Please try again.");
+    } finally {
+      setDisconnecting(false);
+    }
+  }
+
+  async function disconnectSteamAccount() {
+    if (disconnecting) return;
+    setDisconnecting(true);
+    setDisconnectError("");
+    try {
+      await disconnectSteam();
+      setSteamStatus("disconnected");
+      window.location.reload();
+    } catch {
+      setDisconnectError("Could not disconnect Steam. Please try again.");
     } finally {
       setDisconnecting(false);
     }
@@ -97,6 +119,19 @@ export default function ConnectedAccountsCard({
   }, []);
 
   useEffect(() => {
+    let active = true;
+    getSteamConnectionStatus()
+      .then((connected) => {
+        if (active) setSteamStatus(connected ? "connected" : "disconnected");
+      })
+      .catch(() => {
+        if (active) setSteamStatus("unavailable");
+      });
+
+    return () => { active = false; };
+  }, []);
+
+  useEffect(() => {
     if (!feedback) return;
 
     const timeout = window.setTimeout(() => setFeedback(null), 5000);
@@ -115,7 +150,7 @@ export default function ConnectedAccountsCard({
       return;
     }
 
-    setFeedback({ platform: name });
+    startSteamAuthorization();
   }
 
   return (
@@ -138,15 +173,16 @@ export default function ConnectedAccountsCard({
 
       <ul className="mt-6 space-y-4">
         {platforms.map(({ id, name }) => {
-          const comingSoon = id !== "myanimelist";
-          const connected = id === "myanimelist" && (connectedAccounts[id] ?? (malStatus === "connected"));
+          const comingSoon = id === "spotify";
+          const providerStatus = id === "steam" ? steamStatus : malStatus;
+          const connected = id !== "spotify" && (connectedAccounts[id] ?? (providerStatus === "connected"));
           const status = comingSoon
             ? "Coming Soon"
             : connected
               ? "Connected"
-              : malStatus === "loading"
+              : providerStatus === "loading"
                 ? "Checking…"
-                : malStatus === "unavailable"
+                : providerStatus === "unavailable"
                   ? "Status unavailable"
                   : "Disconnected";
           const statusClass = comingSoon
@@ -179,6 +215,7 @@ export default function ConnectedAccountsCard({
                 <button
                   type="button"
                   onClick={() => {
+                    setDisconnectPlatform(id === "steam" ? "steam" : "myanimelist");
                     setDisconnectError("");
                     disconnectDialog.current?.showModal();
                   }}
@@ -187,7 +224,7 @@ export default function ConnectedAccountsCard({
                 >
                   {disconnecting ? "Disconnecting…" : "Disconnect"}
                 </button>
-              ) : !comingSoon && malStatus !== "loading" ? (
+              ) : !comingSoon && providerStatus !== "loading" ? (
                 <button
                   type="button"
                   onClick={() => handleConnect(id, name)}
@@ -212,16 +249,16 @@ export default function ConnectedAccountsCard({
       </div>
       <dialog
         ref={disconnectDialog}
-        aria-labelledby="mal-disconnect-title"
-        aria-describedby="mal-disconnect-description"
+        aria-labelledby="service-disconnect-title"
+        aria-describedby="service-disconnect-description"
         onCancel={(event) => { if (disconnecting) event.preventDefault(); }}
         className="m-auto w-[calc(100%_-_2rem)] max-w-sm rounded-3xl border border-slate-700 bg-slate-950 p-6 text-white shadow-2xl backdrop:bg-black/60"
       >
-        <h3 id="mal-disconnect-title" className="text-xl font-semibold">
-          Disconnect MyAnimeList?
+        <h3 id="service-disconnect-title" className="text-xl font-semibold">
+          Disconnect {disconnectPlatform === "steam" ? "Steam" : "MyAnimeList"}?
         </h3>
-        <p id="mal-disconnect-description" className="mt-2 text-sm text-slate-400">
-          Activity Tracker will stop syncing your anime activity. Your MyAnimeList account and anime list will stay as they are.
+        <p id="service-disconnect-description" className="mt-2 text-sm text-slate-400">
+          This will unlink {disconnectPlatform === "steam" ? "your Steam account" : "MyAnimeList"} from Activity Tracker. Your external account and data will remain unchanged.
         </p>
         {disconnectError && <p role="alert" className="mt-3 text-sm text-red-200">{disconnectError}</p>}
         <div className="mt-6 flex flex-wrap justify-end gap-3">
@@ -237,7 +274,7 @@ export default function ConnectedAccountsCard({
           <button
             type="button"
             disabled={disconnecting}
-            onClick={disconnectMal}
+            onClick={disconnectPlatform === "steam" ? disconnectSteamAccount : disconnectMal}
             className="rounded-xl bg-red-700 px-4 py-2 text-sm font-semibold text-[#fff] hover:bg-red-600 disabled:opacity-50"
           >
             {disconnecting ? "Disconnecting…" : "Disconnect"}

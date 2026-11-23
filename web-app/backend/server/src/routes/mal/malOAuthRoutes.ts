@@ -4,7 +4,7 @@ import express, {
   type RequestHandler,
 } from "express";
 
-import authMiddleware from "../middleware/authMiddleware";
+import authMiddleware from "../../middleware/authMiddleware";
 
 import {
   MalOAuthError,

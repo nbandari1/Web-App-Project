@@ -3,11 +3,11 @@ import express, {
   Response,
 } from "express";
 
-import { db } from "../config/firebase";
+import { db } from "../../config/firebase";
 import { createMalOAuthRouter } from "./malOAuthRoutes";
-import { normalizeMalEntry } from "../activity";
-import authMiddleware from "../middleware/authMiddleware";
-import { MalOAuthError, MalOAuthService } from "../routes/malOAuth";
+import { normalizeMalEntry } from "../../activity";
+import authMiddleware from "../../middleware/authMiddleware";
+import { MalOAuthError, MalOAuthService } from "./malOAuth";
 import { createMalOAuthStore } from "./malOAuthStore";
 
 const router = express.Router();

@@ -8,8 +8,9 @@ import { db } from "./src/config/firebase";
 import noteRoutes from "./src/routes/noteRoutes";
 import userRoutes from "./src/routes/userRoutes";
 import authMiddleware from "./src/middleware/authMiddleware";
-import malRoutes from "./src/routes/malRoutes";
+import malRoutes from "./src/routes/mal/malRoutes";
 import taskRoutes from "./src/routes/taskRoutes";
+import steamRoutes from "./src/routes/steam/steamRoutes";
 
 dotenv.config();
 
@@ -42,6 +43,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/users/:userId/notes", noteRoutes);
 app.use("/api/users/:userId/tasks", taskRoutes);
 app.use("/api/mal", malRoutes);
+app.use("/api/steam", steamRoutes);
 app.post("/auth/login", async (req: Request, res: Response) => {
   const { email, password } = req.body as { email?: string; password?: string };
 
@@ -93,7 +95,7 @@ app.post("/auth/login", async (req: Request, res: Response) => {
     res.cookie(JWT_COOKIE_NAME, token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 15 * 60 * 1000,
     });
 
@@ -115,7 +117,7 @@ app.post("/auth/logout", (_req: Request, res: Response) => {
   res.clearCookie(JWT_COOKIE_NAME, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
   });
 
   res.status(200).json({ success: true, message: "Logged out successfully." });
