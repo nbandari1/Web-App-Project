@@ -3,6 +3,11 @@ import { createHash, randomBytes } from "node:crypto";
 import { FieldValue, Timestamp } from "firebase-admin/firestore";
 import { db } from "../../config/firebase";
 import authMiddleware from "../../middleware/authMiddleware";
+import {
+  getOwnedSteamGames,
+  getRecentSteamActivity,
+  SteamActivityError,
+} from "./steamActivity";
 
 const STEAM_OPENID_URL = "https://steamcommunity.com/openid/login";
 const OPENID_NAMESPACE = "http://specs.openid.net/auth/2.0";
@@ -349,6 +354,189 @@ router.get("/status", privateResponse, authMiddleware, async (req, res) => {
     return res.status(503).json({ success: false, message: "Connection status unavailable" });
   }
 });
+async function getLinkedSteamId(userId: string) {
+  const connection = await db
+    .collection("users")
+    .doc(userId)
+    .collection("linkedServices")
+    .doc("steam")
+    .get();
+
+  const data = connection.data();
+  const steamId = data?.providerUserId;
+
+  if (
+    data?.connected !== true ||
+    typeof steamId !== "string" ||
+    !/^\d{17}$/.test(steamId)
+  ) {
+    throw new SteamActivityError(
+      409,
+      "Connect a Steam account first.",
+    );
+  }
+
+  return steamId;
+}
+
+function queryNumber(
+  value: unknown,
+  fallback: number,
+  minimum: number,
+  maximum: number,
+  name: string,
+) {
+  if (value === undefined) {
+    return fallback;
+  }
+
+  if (
+    typeof value !== "string" ||
+    !/^\d+$/.test(value)
+  ) {
+    throw new SteamActivityError(
+      400,
+      `${name} must be between ${minimum} and ${maximum}.`,
+    );
+  }
+
+  const number = Number(value);
+
+  if (
+    !Number.isSafeInteger(number) ||
+    number < minimum ||
+    number > maximum
+  ) {
+    throw new SteamActivityError(
+      400,
+      `${name} must be between ${minimum} and ${maximum}.`,
+    );
+  }
+
+  return number;
+}
+
+function activityError(
+  res: express.Response,
+  error: unknown,
+) {
+  if (error instanceof SteamActivityError) {
+    return res.status(error.status).json({
+      success: false,
+      message: error.message,
+    });
+  }
+
+  return res.status(500).json({
+    success: false,
+    message: "Steam activity could not be loaded.",
+  });
+}
+
+router.get(
+  "/activity",
+  privateResponse,
+  authMiddleware,
+  async (req, res) => {
+    if (!req.userId) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+
+    try {
+      const count = queryNumber(
+        req.query.count,
+        10,
+        1,
+        100,
+        "count",
+      );
+
+      const steamId =
+        await getLinkedSteamId(req.userId);
+
+      const activity =
+        await getRecentSteamActivity(
+          steamId,
+          count,
+        );
+
+      return res.json({
+        success: true,
+        source: "steam",
+        kind: "measured",
+        windowDays: 14,
+        summary: {
+          totalGameCount:
+            activity.totalCount,
+          returnedGameCount:
+            activity.games.length,
+          playtimeMinutes:
+            activity.recentPlaytimeMinutes,
+          complete:
+            activity.games.length >=
+            activity.totalCount,
+        },
+        games: activity.games,
+      });
+    } catch (error) {
+      return activityError(res, error);
+    }
+  },
+);
+
+router.get(
+  "/games",
+  privateResponse,
+  authMiddleware,
+  async (req, res) => {
+    if (!req.userId) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+
+    try {
+      const limit = queryNumber(
+        req.query.limit,
+        50,
+        1,
+        100,
+        "limit",
+      );
+
+      const offset = queryNumber(
+        req.query.offset,
+        0,
+        0,
+        100000,
+        "offset",
+      );
+
+      const steamId =
+        await getLinkedSteamId(req.userId);
+
+      const library =
+        await getOwnedSteamGames(steamId);
+
+      return res.json({
+        success: true,
+        totalCount: library.totalCount,
+        limit,
+        offset,
+        games: library.games.slice(
+          offset,
+          offset + limit,
+        ),
+      });
+    } catch (error) {
+      return activityError(res, error);
+    }
+  },
+);
 
 router.delete("/connection", privateResponse, authMiddleware, async (req, res) => {
   if (!req.userId) return res.status(401).json({ success: false, message: "Unauthorized" });
