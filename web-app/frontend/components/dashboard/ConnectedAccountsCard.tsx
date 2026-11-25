@@ -138,7 +138,7 @@ export default function ConnectedAccountsCard({
     return () => window.clearTimeout(timeout);
   }, [feedback]);
 
-  function handleConnect(platform: ConnectablePlatform, name: string) {
+  function handleConnect(platform: ConnectablePlatform) {
     if (onConnect) {
       setFeedback(null);
       onConnect(platform);
@@ -227,7 +227,7 @@ export default function ConnectedAccountsCard({
               ) : !comingSoon && providerStatus !== "loading" ? (
                 <button
                   type="button"
-                  onClick={() => handleConnect(id, name)}
+                  onClick={() => handleConnect(id)}
                   aria-label={`Connect ${name}`}
                   className="inline-flex min-h-11 shrink-0 items-center justify-center rounded-2xl bg-cyan-400 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-cyan-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-300"
                 >

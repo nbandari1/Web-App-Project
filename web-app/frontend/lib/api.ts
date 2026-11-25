@@ -10,15 +10,23 @@ export function startSteamAuthorization() {
   window.location.assign(`${API_BASE_URL}/api/steam/authorize`);
 }
 
-export async function getSteamConnectionStatus(): Promise<boolean> {
+let steamStatusRequest: Promise<boolean> | null = null;
+export function getSteamConnectionStatus(): Promise<boolean> {
+  if (!steamStatusRequest) {
+    steamStatusRequest = fetchSteamConnectionStatus().finally(() => { steamStatusRequest = null; });
+  }
+  return steamStatusRequest;
+}
+
+async function fetchSteamConnectionStatus(): Promise<boolean> {
   const response = await fetch(`${API_BASE_URL}/api/steam/status`, {
     credentials: "include",
     cache: "no-store",
   });
   const data = await response.json();
 
-  if (!response.ok || typeof data.connected !== "boolean") {
-    throw new Error("Steam connection status is unavailable");
+  if (!response.ok || typeof data?.connected !== "boolean") {
+    throw new Error(response.status === 401 ? "Your session expired. Sign in again." : "Steam connection status is unavailable");
   }
 
   return data.connected;
