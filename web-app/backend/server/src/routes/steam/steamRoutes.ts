@@ -209,24 +209,24 @@ async function getSteamProfile(steamId: string) {
   };
 }
 
-async function consumeState(state: string, userId: string) {
+async function consumeState(state: string) {
   return db.runTransaction(async (transaction) => {
     const requestRef = db.collection("_steamOpenIdRequests").doc(digest(state));
     const snapshot = await transaction.get(requestRef);
 
-    if (!snapshot.exists) return false;
+    if (!snapshot.exists) return null;
 
     const data = snapshot.data();
     const expiresAt =
       data?.expiresAt instanceof Timestamp ? data.expiresAt.toMillis() : 0;
 
-    if (data?.userId !== userId || expiresAt <= Date.now()) {
-      if (data?.userId === userId) transaction.delete(requestRef);
-      return false;
+    if (typeof data?.userId !== "string" || !data.userId || expiresAt <= Date.now()) {
+      transaction.delete(requestRef);
+      return null;
     }
 
     transaction.delete(requestRef);
-    return true;
+    return data.userId;
   });
 }
 
@@ -314,9 +314,7 @@ router.get("/authorize", privateResponse, authMiddleware, async (req, res) => {
   }
 });
 
-router.get("/callback", privateResponse, authMiddleware, async (req, res) => {
-  if (!req.userId) return res.status(401).json({ success: false, message: "Unauthorized" });
-
+router.get("/callback", privateResponse, async (req, res) => {
   try {
     const state = typeof req.query.state === "string" ? req.query.state : "";
     const fields = getOpenIdFields(req);
@@ -332,11 +330,12 @@ router.get("/callback", privateResponse, authMiddleware, async (req, res) => {
 
     const steamId = await verifyAssertion(fields);
     const profile = await getSteamProfile(steamId);
-    if (!(await consumeState(state, req.userId))) {
+    const userId = await consumeState(state);
+    if (!userId) {
       throw new SteamOpenIdError(400, "Steam sign-in request is invalid or expired. Start linking again.");
     }
 
-    await saveConnection(req.userId, steamId, profile);
+    await saveConnection(userId, steamId, profile);
     return res.redirect(303, getDashboardUrl());
   } catch (error) {
     return fail(res, error);
